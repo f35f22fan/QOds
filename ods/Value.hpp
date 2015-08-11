@@ -123,6 +123,9 @@ public:
 
 	void
 	SetCurrency(const double d);
+
+	void
+	SetDate(const QDateTime &r);
 	
 	void
 	SetDouble(const double d);

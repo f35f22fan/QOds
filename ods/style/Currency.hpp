@@ -21,7 +21,7 @@ public:
 	info() const { return info_; }
 
 	const QString&
-	name() { return name_; }
+	name() const { return name_; }
 
 	void
 	SetInfo(const ods::CurrencyInfo &info);

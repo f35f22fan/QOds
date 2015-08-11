@@ -154,6 +154,9 @@ public:
 	SetStyle(ods::Style*);
 	
 	void
+	SetValue(const QDateTime&);
+
+	void
 	SetValue(const double);
 	
 	void

@@ -218,7 +218,7 @@ Cell::SetCurrencyValue(const double num, ods::Style *style)
 	{
 		// create and use a currency style with default values
 		ods::CurrencyInfo info;
-		style = row_->sheet()->book()->CreateCurrencyStyle(info);
+		style = row_->sheet()->book()->CreateStyle(info);
 	}
 
 	SetStyle(style);
@@ -350,9 +350,22 @@ Cell::SetStyle(ods::Style *style)
 }
 
 void
+Cell::SetValue(const QDateTime &dt)
+{
+	auto &ns = tag_->ns();
+	tag_->AttrSet(ns.office(), ods::ns::kValueType, ods::ns::kDate);
+	const QString value = dt.toString("yyyy-MM-dd");
+	tag_->AttrSet(ns.office(), ods::ns::kDateValue, value);
+	tag_->SetTextP(dt.toString("yyyy.MM.dd"));
+	if (tag_->attrs() != nullptr)
+		value_.Read(ns, *tag_->attrs());
+}
+
+void
 Cell::SetValue(const double num)
 {
 	auto &ns = tag_->ns();
+	tag_->AttrDelete(ns.office(), ods::ns::kDateValue);
 	tag_->AttrSet(ns.office(), ods::ns::kValueType, ods::ns::kDouble);
 	const QString value = QString::number(num);
 	tag_->AttrSet(ns.office(), ods::ns::kValue, value);
@@ -365,6 +378,7 @@ void
 Cell::SetValue(const QString &value)
 {
 	auto &ns = tag_->ns();
+	tag_->AttrDelete(ns.office(), ods::ns::kDateValue);
 	tag_->AttrSet(ns.office(), ods::ns::kValueType, ods::ns::kString);
 	tag_->SetTextP(value);
 	if (tag_->attrs() != nullptr)

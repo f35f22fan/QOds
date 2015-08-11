@@ -56,6 +56,22 @@ Attrs::Clone()
 	return inst;
 }
 
+void
+Attrs::Delete(ods::Prefix &prefix, const char *name)
+{
+	for (int i = 0; i <= attrs_.size(); i++)
+	{
+		auto *attr = attrs_[i];
+		ods::Prefix &curr_prefix = attr->prefix();
+		if (prefix.uri().id != curr_prefix.uri().id)
+			continue;
+		if (strcmp(name, attr->name()) != 0)
+			continue;
+		attrs_.remove(i);
+		return;
+	}
+}
+
 ods::Attr*
 Attrs::Get(ods::Prefix &prefix, const char *name)
 {
@@ -67,7 +83,7 @@ Attrs::Get(ods::Prefix &prefix, const char *name)
 		if (strcmp(name, attr->name()) == 0)
 			return attr;
 	}
-	//only reached if buggy code
+	//only reached if code is buggy
 	return nullptr;
 }
 

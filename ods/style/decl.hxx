@@ -6,6 +6,7 @@ namespace style	{ // ods::style::
 
 class Border;
 class Currency;
+class Date;
 class Manager;
 class Percent;
 class StyleFamily;

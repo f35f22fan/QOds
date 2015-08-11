@@ -45,12 +45,15 @@ public:
 	
 	void
 	Add(ods::Prefix &prefix, const char *name);
-	
+
 	QVector<ods::Attr*>&
 	attrs() { return attrs_; }
 	
 	ods::Attrs*
 	Clone();
+
+	void
+	Delete(ods::Prefix &prefix, const char *name);
 	
 	ods::Attr*
 	Get(ods::Prefix &prefix, const char *name);

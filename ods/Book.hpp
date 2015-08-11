@@ -25,6 +25,7 @@
 #include "global.hxx"
 #include "Content.hpp"
 #include "decl.hxx"
+#include "style/decl.hxx"
 #include "Duration.hpp"
 #include "err.hpp"
 #include "i18n.hxx"
@@ -38,12 +39,6 @@
 class QXmlStreamWriter;
 
 namespace ods	{
-
-namespace style	{ // ods::style::
-class Currency;
-class Manager;
-class Percent;
-} // ods::style::
 
 class ODS_API Book
 {
@@ -62,7 +57,7 @@ public:
 	CreateCellStyle() { return CreateStyle(ods::StyleFamilyId::Cell); }
 
 	ods::Style*
-	CreateCurrencyStyle(const ods::CurrencyInfo &info);
+	CreateStyle(const ods::CurrencyInfo &info);
 	
 	ods::style::Percent*
 	CreatePercentStyle(const ods::StylePlace place
@@ -102,6 +97,9 @@ public:
 
 	ods::style::Currency*
 	GetCurrencyStyle(const QString &name);
+
+	ods::style::Date*
+	GetDateStyle(const QString &name);
 	
 	const QString&
 	GetFrameId(const QString kFileName);

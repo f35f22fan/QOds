@@ -41,6 +41,13 @@ Tag::~Tag()
 }
 
 void
+Tag::AttrDelete(ods::Prefix &prefix, const char *key)
+{
+	if (attrs_ != nullptr)
+		attrs_->Delete(prefix, key);
+}
+
+void
 Tag::AttrSet(ods::Prefix &prefix, const char *key, const QString &value)
 {
 	if (attrs_ == nullptr)
@@ -65,8 +72,8 @@ Tag::Clone()
 void
 Tag::DeleteSubnodes()
 {
-	foreach (auto *item, subnodes_)
-		delete item;
+	foreach (auto *node, subnodes_)
+		delete node;
 	subnodes_.clear();
 }
 

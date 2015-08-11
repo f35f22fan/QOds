@@ -46,6 +46,12 @@ public:
 	bool
 	Equals(const ods::CurrencyInfo &t) const;
 
+	bool
+	IsUSD() const { return currency_.id == ods::i18n::CurrencyId::USD; }
+
+	bool
+	IsEUR() const { return currency_.id == ods::i18n::CurrencyId::EUR; }
+
 	const ods::i18n::Language&
 	language() const { return language_; }
 

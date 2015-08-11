@@ -385,6 +385,7 @@ SheetCell(ods::Ns &ns, ods::Tag *tag)
 	tag->Add(ns.sheet(), ods::style::kStyleName);
 	tag->Add(ns.office(), ods::ns::kValue);
 	tag->Add(ns.office(), ods::ns::kValueType);
+	tag->Add(ns.office(), ods::ns::kDateValue);
 	tag->SubfuncAdd(ods::tag::TextP);
 	return nullptr;
 }

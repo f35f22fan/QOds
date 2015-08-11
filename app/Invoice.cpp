@@ -201,10 +201,10 @@ Invoice::CreateTable(QVector<app::Item*> *vec, const int kLastRow)
 	info.language_set(ods::i18n::kGerman);
 	info.decimal_places_set(2);
 
-	auto *light_style = book_.CreateCurrencyStyle(info);
+	auto *light_style = book_.CreateStyle(info);
 	light_style->SetBorder(border);
 
-	auto *dark_style = book_.CreateCurrencyStyle(info);
+	auto *dark_style = book_.CreateStyle(info);
 	dark_style->SetBorder(border);
 	const int c = 230;
 	dark_style->SetBackgroundColor(QColor(c, c, c));
@@ -294,7 +294,7 @@ Invoice::CreateTable(QVector<app::Item*> *vec, const int kLastRow)
 	total_cell->SetRowColSpan(1, 2);
 	
 	border = new ods::style::Border(); // all sides
-	auto *total_style = book_.CreateCurrencyStyle(info);
+	auto *total_style = book_.CreateStyle(info);
 	total_style->SetBorder(border);
 	total_cell->SetFormula(formula, total_style);
 	

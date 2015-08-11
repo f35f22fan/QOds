@@ -400,7 +400,7 @@ Lesson12_CreateCurrency()
 	info.language_set(ods::i18n::kGerman);
 	info.decimal_places_set(3);
 
-	ods::Style *style = book.CreateCurrencyStyle(info);
+	ods::Style *style = book.CreateStyle(info);
 	row->CreateCell(1)->SetCurrencyValue(1008.94, style);
 	row->CreateCell(2)->SetCurrencyValue(0.402, style);
 
@@ -411,20 +411,53 @@ Lesson12_CreateCurrency()
 	info.country_set(ods::i18n::kUSA);
 	info.language_set(ods::i18n::kEnglish);
 	info.decimal_places_set(1);
-	style = book.CreateCurrencyStyle(info);
-	sheet->CreateRow(1)->CreateCell(0)->SetCurrencyValue(4.2, style);
-	sheet->CreateRow(2)->CreateCell(0)->SetCurrencyValue(102.3, style);
+	delete style;
+	style = book.CreateStyle(info);
+	row = sheet->CreateRow(1);
+	row->CreateCell(0)->SetCurrencyValue(4.2, style);
+	row->CreateCell(1)->SetCurrencyValue(102.3, style);
+	row->CreateCell(2)->SetCurrencyValue(60, style);
 
+	row = sheet->CreateRow(2);
 	// add a few non-currency values:
-	sheet->CreateRow(3)->CreateCell(0)->SetValue("Hello");
-	sheet->CreateRow(3)->CreateCell(0)->SetValue("40.3");
+	row->CreateCell(0)->SetValue("Non currency cells: ");
+	row->CreateCell(1)->SetValue("Hello");
+	row->CreateCell(2)->SetValue(40.3);
 
 	Save(book);
+}
 
-	/**
-	// => read values from currency cells
-	// for example read cell at row 0 col 0:
-	auto *cell = sheet->row(0)->cell(0);
+void
+Lesson13_ReadCurrency()
+{
+	auto path = QDir(QDir::homePath()).filePath("Currency.ods");
+	QFile file(path);
+	if (!file.exists())
+	{
+		qDebug() << "No such file:" << path;
+		return;
+	}
+	ods::Book book(path);
+
+	auto *sheet = book.sheet(0);
+	if (sheet == nullptr)
+	{
+		qDebug() << "No sheet at 0";
+		return;
+	}
+	auto *row = sheet->row(0);
+	if (row == nullptr)
+	{
+		qDebug() << "No such row at 0";
+		return;
+	}
+	auto *cell = row->cell(2);
+	if (cell == nullptr)
+	{
+		qDebug() << "No such cell at 2";
+		return;
+	}
+
 	auto &value = cell->value();
 	if (!value.IsCurrency())
 	{
@@ -432,8 +465,28 @@ Lesson12_CreateCurrency()
 		return;
 	}
 	qDebug() << "currency value:" << *value.AsCurrency(); // returns a double
-	// <= read values from currency cells
-	**/
+
+	// next test the type of currency
+	auto *style = cell->style();
+	if (style == nullptr)
+	{
+		qDebug() << "style = nullptr";
+		return;
+	}
+	ods::style::Currency *curr_style = style->GetCurrencyStyle();
+	if (curr_style == nullptr)
+	{
+		qDebug() << "currency style = nullptr";
+		return;
+	}
+
+	const ods::CurrencyInfo *info = curr_style->info();
+	if (info->IsUSD())
+		qDebug() << "The currency is US Dollar";
+	else if (info->IsEUR())
+		qDebug() << "The currency is Euro";
+	 else
+		qDebug() << "The currency is something else";
 }
 
 QString
@@ -471,19 +524,86 @@ GetCellValue(ods::Cell *cell)
 	return "unknown cell type";
 }
 
+void
+ReadDates()
+{
+	auto path = QDir(QDir::homePath()).filePath("test_dates.ods");
+	QFile file(path);
+	if (!file.exists())
+	{
+		qDebug() << "No such file:" << path;
+		return;
+	}
+	ods::Book book(path);
+	auto *sheet = book.sheet(0);
+
+	if (sheet == nullptr)
+	{
+		qDebug() << "No sheet at 0";
+		return;
+	}
+	const int kCellIndex = 0;
+	auto *row = sheet->row(kCellIndex);
+
+	if (row == nullptr)
+	{
+		qDebug() << "No such row at " << kCellIndex;
+		return;
+	}
+
+	const int col = 2;
+	auto *cell = row->cell(col);
+
+	if (cell == nullptr)
+	{
+		qDebug() << "No such cell at " << col;
+		return;
+	}
+	auto &value = cell->value();
+
+	if (!value.IsDate())
+	{
+		qDebug() << "is not date";
+		return;
+	}
+	QDateTime *dt = value.AsDate();
+
+	if (dt == nullptr)
+	{
+		qDebug() << "dt is nullptr";
+		return;
+	}
+	qDebug() << "datetime:" << dt->toString("dd.MM.yyyy");
+}
+
+void
+WriteDates()
+{
+	ods::Book book;
+	auto *sheet = book.CreateSheet("Sheet1");
+	auto *row = sheet->CreateRow(0);
+
+	auto *cell = row->CreateCell(0);
+	cell->SetValue(QDateTime(QDate(1981, 01, 04)));
+
+	Save(book);
+}
+
 int
 main(int argc, char *argv[])
 {
 	QCoreApplication app(argc, argv);
 	
-	qDebug().nospace() << "ods version: " << ods::version_major() << "."
+	qDebug().nospace() << "QOds version: " << ods::version_major() << "."
 		<< ods::version_minor() << "." << ods::version_micro();
 	
 	//Lesson1_CreateEmptyBook();
-	Lesson9_CreateSampleInvoice();
+	//Lesson9_CreateSampleInvoice();
 	//Lesson10_ReadFile();
 	//Lesson11_CreateFormulaWithPercentage();
 	//Lesson12_CreateCurrency();
+	//Lesson13_ReadCurrency();
+	WriteDates();
 	
 	return 0;
 }

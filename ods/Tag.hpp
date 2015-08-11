@@ -75,6 +75,9 @@ public:
 	attrs_set(ods::Attrs *attrs) { attrs_ = attrs; }
 	
 	void
+	AttrDelete(ods::Prefix &prefix, const char *key);
+
+	void
 	AttrSet(ods::Prefix &prefix, const char *key, const QString &value);
 	
 	quint8

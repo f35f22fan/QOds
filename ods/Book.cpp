@@ -96,17 +96,6 @@ Book::Add(ods::DrawFrame *df)
 	manifest_->Add(df);
 }
 
-ods::Style*
-Book::CreateCurrencyStyle(const ods::CurrencyInfo &info)
-{
-	auto *style = CreateStyle(ods::StyleFamilyId::Cell,
-		ods::StylePlace::ContentFile);
-	auto *currency_style = CreateCurrencyStyle(ods::StylePlace::StylesFile);
-	style->SetCurrencyStyle(currency_style);
-	currency_style->SetInfo(info);
-	return style;
-}
-
 ods::style::Currency*
 Book::CreateCurrencyStyle(const ods::StylePlace place)
 {
@@ -141,6 +130,17 @@ Book::CreateSheet(const QString &sheet_name)
 	if (content_ == nullptr)
 		InitDefault();
 	return content_->CreateSheet(sheet_name);
+}
+
+ods::Style*
+Book::CreateStyle(const ods::CurrencyInfo &info)
+{
+	auto *style = CreateStyle(ods::StyleFamilyId::Cell,
+		ods::StylePlace::ContentFile);
+	auto *currency_style = CreateCurrencyStyle(ods::StylePlace::StylesFile);
+	style->SetCurrencyStyle(currency_style);
+	currency_style->SetInfo(info);
+	return style;
 }
 
 ods::Style*
@@ -202,6 +202,12 @@ Book::GetCurrencyStyle(const QString &name)
 			return item;
 	}
 	return nullptr;
+}
+
+ods::style::Date*
+Book::GetDateStyle(const QString &name)
+{
+
 }
 
 QString*

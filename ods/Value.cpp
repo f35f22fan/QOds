@@ -57,6 +57,8 @@ Value::CopyTo(ods::Value &v)
 		v.SetCurrency(*AsCurrency());
 	else if (IsPercentage())
 		v.SetPercentage(*AsPercentage());
+	else if (IsDate())
+		v.SetDate(*AsDate());
 	else
 		mtl_warn("Not implemented");
 }
@@ -70,6 +72,8 @@ Value::DeleteData()
 		delete AsDouble();
 	else if (IsString())
 		delete AsString();
+	else if (IsDate())
+		delete AsDate();
 	data_ = nullptr;
 	type_ = ods::Type::NotSet;
 }
@@ -77,8 +81,8 @@ Value::DeleteData()
 QString
 Value::Diagnose()
 {
-	return QString("[Cell] [type] ") + ods::TypeToString(type_) +
-		QString(" [value]") + toString();
+	return QLatin1String("Cell type: ") + ods::TypeToString(type_) +
+		QLatin1String(", value: ") + toString();
 }
 
 void
@@ -93,11 +97,12 @@ Value::Read(ods::Ns &ns, ods::Attrs &attrs)
 	}
 	type_ = ods::TypeFromString(type_attr->value());
 	auto *value_attr = attrs.Get(ns.office(), ods::ns::kValue);
-	if (value_attr == nullptr) {
+	if (value_attr == nullptr)
+	{
 		type_ = ods::Type::Fail;
 		return;
 	}
-	
+
 	if (IsDouble() || IsPercentage() || IsCurrency())
 	{
 		double num;
@@ -109,6 +114,15 @@ Value::Read(ods::Ns &ns, ods::Attrs &attrs)
 		set(new double(num), type_);
 	} else if (IsString()) {
 		set(new QString(value_attr->value()), ods::Type::String);
+	} else if (IsDate()) {
+		auto *custom_attr = attrs.Get(ns.office(), ods::ns::kDateValue);
+		if (custom_attr == nullptr)
+		{
+			mtl_warn("custom_attr == nullptr");
+			return;
+		}
+		auto dt = QDateTime::fromString(custom_attr->value(), Qt::ISODate);
+		set(new QDateTime(dt), type_);
 	} else {
 		type_ = ods::Type::NotSet;
 	}
@@ -134,6 +148,14 @@ Value::SetCurrency(const double d)
 {
 	SetDouble(d);
 	type_ = ods::Type::Currency;
+}
+
+void
+Value::SetDate(const QDateTime &r)
+{
+	DeleteData();
+	type_ = ods::Type::Date;
+	data_ = new QDateTime(r);
 }
 
 void

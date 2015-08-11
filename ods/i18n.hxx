@@ -49,7 +49,7 @@ const Country kUSA { ods::i18n::Id::USA, "US" };
 
 enum class CurrencyId : quint16 {
 	USD,
-	Euro,
+	EUR,
 	GbPound, // British pound
 	Renminbi, // Chinese
 	RusRuble // Russian
@@ -62,7 +62,7 @@ struct Currency {
 };
 
 const Currency kUSD = { CurrencyId::USD, "$", "USD" };
-const Currency kEuro = { CurrencyId::Euro, "€", "EUR" };
+const Currency kEuro = { CurrencyId::EUR, "€", "EUR" };
 const Currency kGbPound = { CurrencyId::GbPound, "₤", "GBP" };
 const Currency kRenminbi = { CurrencyId::Renminbi, "¥", "CNY" };
 const Currency kRusRuble = { CurrencyId::RusRuble, "₽", "RUB" };
