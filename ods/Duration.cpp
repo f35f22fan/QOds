@@ -27,9 +27,7 @@
 
 namespace ods	{
 
-Duration::Duration() :
-	years_(0), months_(0), days_(0), hours_(0), minutes_(0), seconds_(0),
-	valid_(false)
+Duration::Duration()
 {}
 
 Duration::~Duration()
@@ -110,6 +108,19 @@ Duration::FromString(const QString &str)
 	}
 	d.valid_set(true);
 	return d;
+}
+
+QString
+Duration::ToString() const
+{
+	QString str = "PT";
+	str += QString::number(hours_);
+	str += 'H';
+	str += QString::number(minutes_);
+	str += 'M';
+	str += QString::number(seconds_);
+	str += 'S';
+	return str;
 }
 
 } // namespace ods

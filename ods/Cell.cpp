@@ -24,13 +24,16 @@
 #include "Attrs.hpp"
 #include "Book.hpp"
 #include "CurrencyInfo.hpp"
+#include "DateInfo.hpp"
 #include "DrawFrame.hpp"
 #include "Formula.hpp"
 #include "Node.hpp"
 #include "Ns.hpp"
 #include "ods.hh"
 #include "style/Currency.hpp"
+#include "style/Date.hpp"
 #include "style/Percent.hpp"
+#include "style/Time.hpp"
 #include "Row.hpp"
 #include "Sheet.hpp"
 #include "style/style.hxx"
@@ -38,6 +41,7 @@
 #include "Style.hpp"
 #include "tag.hh"
 #include "Tag.hpp"
+#include "TimeInfo.hpp"
 #include "util.hh"
 #include "Value.hpp"
 
@@ -350,13 +354,74 @@ Cell::SetStyle(ods::Style *style)
 }
 
 void
-Cell::SetValue(const QDateTime &dt)
+Cell::SetValue(const QDateTime &dt, ods::Style *style)
 {
 	auto &ns = tag_->ns();
+
+	if (style == nullptr)
+	{
+		// create and use a date style with default values
+		ods::DateInfo info;
+		style = row_->sheet()->book()->CreateStyle(info);
+	}
+
+	SetStyle(style);
+
 	tag_->AttrSet(ns.office(), ods::ns::kValueType, ods::ns::kDate);
 	const QString value = dt.toString("yyyy-MM-dd");
 	tag_->AttrSet(ns.office(), ods::ns::kDateValue, value);
-	tag_->SetTextP(dt.toString("yyyy.MM.dd"));
+
+	ods::style::Date *date = style->GetDateStyle();
+	if (date == nullptr)
+	{
+		mtl_line("date = null");
+		return;
+	}
+	const ods::DateInfo *info = date->info();
+	if (info == nullptr)
+	{
+		mtl_line("info = null");
+		return;
+	}
+
+	if (tag_->attrs() != nullptr)
+		value_.Read(ns, *tag_->attrs());
+}
+
+void
+Cell::SetValue(const QTime &t, ods::Style *style)
+{
+	auto &ns = tag_->ns();
+
+	if (style == nullptr)
+	{
+		// create and use a time style with default values
+		ods::TimeInfo info;
+		style = row_->sheet()->book()->CreateStyle(info);
+	}
+
+	SetStyle(style);
+
+	tag_->AttrSet(ns.office(), ods::ns::kValueType, ods::ns::kTime);
+	ods::Duration d;
+	d.hours_set(t.hour());
+	d.minutes_set(t.minute());
+	d.seconds_set(t.second());
+	tag_->AttrSet(ns.office(), ods::ns::kTimeValue, d.ToString());
+
+	ods::style::Time *time = style->GetTimeStyle();
+	if (time == nullptr)
+	{
+		mtl_line("time = null");
+		return;
+	}
+	const ods::TimeInfo *info = time->info();
+	if (info == nullptr)
+	{
+		mtl_line("info = null");
+		return;
+	}
+
 	if (tag_->attrs() != nullptr)
 		value_.Read(ns, *tag_->attrs());
 }

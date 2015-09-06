@@ -63,12 +63,18 @@ public:
 
 	ods::style::Currency*
 	GetCurrencyStyle();
+
+	ods::style::Date*
+	GetDateStyle();
 	
 	ods::style::Percent*
 	GetPercentStyle();
 	
 	ods::Tag*
 	GetTag(ods::tag::func f);
+
+	ods::style::Time*
+	GetTimeStyle();
 	
 	const QString&
 	name() { return name_; }
@@ -87,6 +93,9 @@ public:
 
 	void
 	SetCurrencyStyle(ods::style::Currency*);
+
+	void
+	SetDateStyle(ods::style::Date*);
 	
 	void
 	SetFontName(const QString &font_name);
@@ -118,6 +127,9 @@ public:
 	
 	void
 	SetTextColor(const QColor &color);
+
+	void
+	SetTimeStyle(ods::style::Time*);
 	
 	void
 	SetVAlignment(const ods::VAlign a);
@@ -140,6 +152,7 @@ private:
 	QColor					background_color_;
 	ods::Book				*book_ = nullptr;
 	ods::style::Currency	*currency_style_ = nullptr;
+	ods::style::Date		*date_style_ = nullptr;
 	QString					font_name_;
 	double					font_size_ = -1.0;
 	ods::FontSizeType		font_size_type_ = ods::FontSizeType::NotSet;
@@ -149,6 +162,7 @@ private:
 	ods::StylePlace			place_;
 	ods::style::StyleFamily	*style_family_ = nullptr;
 	ods::Tag				*tag_ = nullptr;
+	ods::style::Time		*time_style_ = nullptr;
 	QColor					text_color_;
 };
 

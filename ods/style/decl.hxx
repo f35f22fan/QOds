@@ -10,6 +10,7 @@ class Date;
 class Manager;
 class Percent;
 class StyleFamily;
+class Time;
 
 } // ods::style::
 } // ods::

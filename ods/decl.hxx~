@@ -7,7 +7,6 @@ class Book;
 class Cell;
 class Content;
 class CurrencyInfo;
-class DateInfo;
 class Formula;
 class DrawFrame;
 class Manifest;
@@ -18,7 +17,6 @@ class Settings;
 class Sheet;
 class Style;
 class Tag;
-class TimeInfo;
 
 } // ods::
 

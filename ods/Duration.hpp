@@ -78,6 +78,9 @@ public:
 	
 	void
 	seconds_set(const qint32 n) { seconds_ = n; }
+
+	QString
+	ToString() const;
 	
 	bool
 	valid() const { return valid_; }
@@ -87,13 +90,13 @@ public:
 	
 private:
 	
-	qint32		years_;
-	qint32		months_;
-	qint32		days_;
-	qint32		hours_;
-	qint32		minutes_;
-	qint32		seconds_;
-	bool		valid_;
+	qint32		years_ = 0;
+	qint32		months_ = 0;
+	qint32		days_ = 0;
+	qint32		hours_ = 0;
+	qint32		minutes_ = 0;
+	qint32		seconds_ = 0;
+	bool		valid_ = false;
 };
 
 } // namespace ods

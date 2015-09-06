@@ -105,7 +105,13 @@ public:
 	GetSubtag(ods::Prefix &prefix, const char *name);
 	
 	ods::Tag*
-	GetSubtag(ods::tag::func f);
+	GetSubtag(ods::tag::func f, const qint8 id_num = -1);
+
+	qint8
+	id_num() const { return id_num_; }
+
+	void
+	id_num_set(const qint8 n) { id_num_ = n; }
 	
 	bool
 	IsAnyCell() const { return
@@ -183,6 +189,7 @@ private:
 	QVector<ods::tag::func>	subfuncs_;
 	QVector<ods::Node*>		subnodes_;
 	quint8					bits_ = 0;
+	qint8					id_num_ = -1;
 };
 
 } // ods::

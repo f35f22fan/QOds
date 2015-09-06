@@ -223,6 +223,111 @@ NumberCurrencyStyle(ods::Ns &ns, ods::Tag *tag)
 }
 
 ods::Tag*
+NumberDateStyle(ods::Ns &ns, ods::Tag *tag)
+{
+	if (tag == nullptr) {
+		tag = new ods::Tag(ns, ods::style::tag::NumberDateStyle);
+		tag->attr_set(ns.number(), ods::style::kDateStyle);
+		return tag;
+	}
+	tag->Add(ns.style(), ods::ns::kName);
+	tag->SubfuncAdd(ods::style::tag::NumberDay);
+	tag->SubfuncAdd(ods::style::tag::NumberMonth);
+	tag->SubfuncAdd(ods::style::tag::NumberYear);
+	tag->SubfuncAdd(ods::tag::NumberText);
+
+	return nullptr;
+}
+
+ods::Tag*
+NumberDay(ods::Ns &ns, ods::Tag *tag)
+{
+	if (tag == nullptr) {
+		tag = new ods::Tag(ns, ods::style::tag::NumberDay);
+		tag->attr_set(ns.number(), ods::ns::kDay);
+		return tag;
+	}
+	tag->Add(ns.number(), ods::ns::kStyle);
+	return nullptr;
+}
+
+ods::Tag*
+NumberHours(ods::Ns &ns, ods::Tag *tag)
+{
+	if (tag == nullptr) {
+		tag = new ods::Tag(ns, ods::style::tag::NumberHours);
+		tag->attr_set(ns.number(), ods::ns::kHours);
+		return tag;
+	}
+	tag->Add(ns.number(), ods::ns::kStyle);
+	return nullptr;
+}
+
+ods::Tag*
+NumberMinutes(ods::Ns &ns, ods::Tag *tag)
+{
+	if (tag == nullptr) {
+		tag = new ods::Tag(ns, ods::style::tag::NumberMinutes);
+		tag->attr_set(ns.number(), ods::ns::kMinutes);
+		return tag;
+	}
+	tag->Add(ns.number(), ods::ns::kStyle);
+	return nullptr;
+}
+
+ods::Tag*
+NumberMonth(ods::Ns &ns, ods::Tag *tag)
+{
+	if (tag == nullptr) {
+		tag = new ods::Tag(ns, ods::style::tag::NumberMonth);
+		tag->attr_set(ns.number(), ods::ns::kMonth);
+		return tag;
+	}
+	tag->Add(ns.number(), ods::ns::kStyle);
+	return nullptr;
+}
+
+ods::Tag*
+NumberSeconds(ods::Ns &ns, ods::Tag *tag)
+{
+	if (tag == nullptr) {
+		tag = new ods::Tag(ns, ods::style::tag::NumberSeconds);
+		tag->attr_set(ns.number(), ods::ns::kSeconds);
+		return tag;
+	}
+	tag->Add(ns.number(), ods::ns::kStyle);
+	return nullptr;
+}
+
+ods::Tag*
+NumberTimeStyle(ods::Ns &ns, ods::Tag *tag)
+{
+	if (tag == nullptr) {
+		tag = new ods::Tag(ns, ods::style::tag::NumberTimeStyle);
+		tag->attr_set(ns.number(), ods::style::kTimeStyle);
+		return tag;
+	}
+	tag->Add(ns.style(), ods::ns::kName);
+	tag->SubfuncAdd(ods::style::tag::NumberHours);
+	tag->SubfuncAdd(ods::style::tag::NumberMinutes);
+	tag->SubfuncAdd(ods::style::tag::NumberSeconds);
+	tag->SubfuncAdd(ods::tag::NumberText);
+	return nullptr;
+}
+
+ods::Tag*
+NumberYear(ods::Ns &ns, ods::Tag *tag)
+{
+	if (tag == nullptr) {
+		tag = new ods::Tag(ns, ods::style::tag::NumberYear);
+		tag->attr_set(ns.number(), ods::ns::kYear);
+		return tag;
+	}
+	tag->Add(ns.number(), ods::ns::kStyle);
+	return nullptr;
+}
+
+ods::Tag*
 NumberStyle(ods::Ns &ns, ods::Tag *tag)
 {
 	if (tag == nullptr) {

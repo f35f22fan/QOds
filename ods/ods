@@ -24,6 +24,8 @@
 #include <ods/Cell.hpp>
 #include <ods/cell.hxx>
 #include <ods/CurrencyInfo.hpp>
+#include <ods/DateInfo.hpp>
+#include <ods/TimeInfo.hpp>
 #include <ods/DrawFrame.hpp>
 #include <ods/Formula.hpp>
 #include <ods/Meta.hpp>

@@ -23,6 +23,7 @@
 #include "Book.hpp"
 #include "Cell.hpp"
 #include "CurrencyInfo.hpp"
+#include "DateInfo.hpp"
 #include "DrawFrame.hpp"
 #include "filename.hxx"
 #include "Manifest.hpp"
@@ -32,12 +33,15 @@
 #include "Sheet.hpp"
 #include "Style.hpp"
 #include "style/Currency.hpp"
+#include "style/Date.hpp"
 #include "style/Manager.hpp"
 #include "style/Percent.hpp"
-#include "style/tag.hh"
 #include "style/StyleFamily.hpp"
+#include "style/tag.hh"
+#include "style/Time.hpp"
 #include "Tag.hpp"
 #include "tag.hh"
+#include "TimeInfo.hpp"
 #include <QFile>
 #include <QXmlStreamWriter>
 #include <quazip/JlCompress.h>
@@ -110,6 +114,20 @@ Book::CreateCurrencyStyle(const ods::StylePlace place)
 	return currency_style;
 }
 
+ods::style::Date*
+Book::CreateDateStyle(const ods::StylePlace place)
+{
+	if (content_ == nullptr)
+		InitDefault();
+	auto *date_style = new ods::style::Date(this, place);
+	date_styles_.append(date_style);
+	auto *parent_tag = (place == ods::StylePlace::StylesFile) ?
+		style_manager_->styles_tag() : content_->automatic_styles_tag();
+	auto *tag = date_style->tag();
+	parent_tag->subnodes().append(new ods::Node(tag));
+	return date_style;
+}
+
 ods::style::Percent*
 Book::CreatePercentStyle(const ods::StylePlace place)
 {
@@ -144,6 +162,28 @@ Book::CreateStyle(const ods::CurrencyInfo &info)
 }
 
 ods::Style*
+Book::CreateStyle(const ods::DateInfo &info)
+{
+	auto *style = CreateStyle(ods::StyleFamilyId::Cell,
+		ods::StylePlace::ContentFile);
+	auto *date_style = CreateDateStyle(ods::StylePlace::ContentFile);
+	style->SetDateStyle(date_style);
+	date_style->SetInfo(info);
+	return style;
+}
+
+ods::Style*
+Book::CreateStyle(const ods::TimeInfo &info)
+{
+	auto *style = CreateStyle(ods::StyleFamilyId::Cell,
+		ods::StylePlace::ContentFile);
+	auto *time_style = CreateTimeStyle(ods::StylePlace::ContentFile);
+	style->SetTimeStyle(time_style);
+	time_style->SetInfo(info);
+	return style;
+}
+
+ods::Style*
 Book::CreateStyle(const ods::StyleFamilyId id, const ods::StylePlace place,
 	ods::tag::func func)
 {
@@ -173,6 +213,20 @@ Book::CreateStyle(const ods::StyleFamilyId id, const ods::StylePlace place)
 	return CreateStyle(id, place, ods::style::tag::Style);
 }
 
+ods::style::Time*
+Book::CreateTimeStyle(const ods::StylePlace place)
+{
+	if (content_ == nullptr)
+		InitDefault();
+	auto *time_style = new ods::style::Time(this, place);
+	time_styles_.append(time_style);
+	auto *parent_tag = (place == ods::StylePlace::StylesFile) ?
+		style_manager_->styles_tag() : content_->automatic_styles_tag();
+	auto *tag = time_style->tag();
+	parent_tag->subnodes().append(new ods::Node(tag));
+	return time_style;
+}
+
 ods::style::Currency*
 Book::GetCurrencyStyle(const ods::CurrencyInfo *info)
 {
@@ -186,7 +240,6 @@ Book::GetCurrencyStyle(const ods::CurrencyInfo *info)
 	{
 		if (item->info() == nullptr)
 			continue;
-
 		if (item->info()->Equals(*info))
 			return item;
 	}
@@ -205,9 +258,33 @@ Book::GetCurrencyStyle(const QString &name)
 }
 
 ods::style::Date*
+Book::GetDateStyle(const ods::DateInfo *info)
+{
+	if (info == nullptr)
+	{
+		if (date_styles_.isEmpty())
+			return nullptr;
+		return date_styles_[0];
+	}
+	foreach (auto *item, date_styles_)
+	{
+		if (item->info() == nullptr)
+			continue;
+		if (item->info()->Equals(*info))
+			return item;
+	}
+	return nullptr;
+}
+
+ods::style::Date*
 Book::GetDateStyle(const QString &name)
 {
-
+	foreach (auto *item, date_styles_)
+	{
+		if (name == item->name())
+			return item;
+	}
+	return nullptr;
 }
 
 QString*
@@ -258,6 +335,36 @@ Book::GetStyle(const QString &name, const ods::StyleFamilyId id)
 			continue;
 		if (name == style->name())
 			return style;
+	}
+	return nullptr;
+}
+
+ods::style::Time*
+Book::GetTimeStyle(const ods::TimeInfo *info)
+{
+	if (info == nullptr)
+	{
+		if (time_styles_.isEmpty())
+			return nullptr;
+		return time_styles_[0];
+	}
+	foreach (auto *item, time_styles_)
+	{
+		if (item->info() == nullptr)
+			continue;
+		if (item->info()->Equals(*info))
+			return item;
+	}
+	return nullptr;
+}
+
+ods::style::Time*
+Book::GetTimeStyle(const QString &name)
+{
+	foreach (auto *item, time_styles_)
+	{
+		if (name == item->name())
+			return item;
 	}
 	return nullptr;
 }

@@ -26,11 +26,13 @@
 #include "ods.hh"
 #include "style/Border.hpp"
 #include "style/Currency.hpp"
+#include "style/Date.hpp"
 #include "style/Manager.hpp"
 #include "style/Percent.hpp"
 #include "style/style.hxx"
 #include "style/tag.hh"
 #include "style/StyleFamily.hpp"
+#include "style/Time.hpp"
 #include "Tag.hpp"
 
 namespace ods	{ // ods::
@@ -97,6 +99,25 @@ Style::GetCurrencyStyle()
 	return nullptr;
 }
 
+ods::style::Date*
+Style::GetDateStyle()
+{
+	if (date_style_ != nullptr)
+		return date_style_;
+
+	auto &ns = tag_->ns();
+	const QString *name = tag_->GetAttrString(ns.style(),
+		ods::ns::kDataStyleName);
+	if (name == nullptr)
+		return nullptr;
+
+	auto *date_style = book_->GetDateStyle(*name);
+	if (date_style != nullptr)
+		return date_style;
+	mtl_line("Style not found");
+	return nullptr;
+}
+
 ods::style::Percent*
 Style::GetPercentStyle()
 {
@@ -112,6 +133,25 @@ Style::GetPercentStyle()
 	auto *percent_style = book_->GetPercentStyle(*name);
 	if (percent_style != nullptr)
 		return percent_style;
+	mtl_line("Style not found");
+	return nullptr;
+}
+
+ods::style::Time*
+Style::GetTimeStyle()
+{
+	if (time_style_ != nullptr)
+		return time_style_;
+
+	auto &ns = tag_->ns();
+	const QString *name = tag_->GetAttrString(ns.style(),
+		ods::ns::kDataStyleName);
+	if (name == nullptr)
+		return nullptr;
+
+	auto *time_style = book_->GetTimeStyle(*name);
+	if (time_style != nullptr)
+		return time_style;
 	mtl_line("Style not found");
 	return nullptr;
 }
@@ -192,6 +232,13 @@ Style::SetCurrencyStyle(ods::style::Currency *st)
 }
 
 void
+Style::SetDateStyle(ods::style::Date *r)
+{
+	date_style_ = r;
+	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, r->name());
+}
+
+void
 Style::SetFontName(const QString &kFontName)
 {
 	auto *tag = GetTag(ods::style::tag::TextProps);
@@ -266,6 +313,23 @@ Style::SetFontWeight(const ods::FontWeight w)
 }
 
 void
+Style::SetHAlignment(const ods::HAlign a)
+{
+	QString value;
+	if (a == ods::HAlign::Left)
+		value = QStringLiteral("start");
+	else if (a == ods::HAlign::Center)
+		value = QStringLiteral("center");
+	else
+		value = QStringLiteral("end");
+
+	auto &ns = tag_->ns();
+	auto *tag = GetTag(ods::style::tag::ParagraphProps);
+	tag->AttrSet(ns.fo(), ods::style::kTextAlign, value);
+	tag->AttrSet(ns.fo(), ods::style::kMarginLeft, "0in");
+}
+
+void
 Style::SetItalic(const bool flag)
 {
 	const auto t = flag ? ods::FontStyle::Italic : ods::FontStyle::Normal;
@@ -314,20 +378,10 @@ Style::SetTextColor(const QColor &color)
 }
 
 void
-Style::SetHAlignment(const ods::HAlign a)
+Style::SetTimeStyle(ods::style::Time *r)
 {
-	QString value;
-	if (a == ods::HAlign::Left)
-		value = QStringLiteral("start");
-	else if (a == ods::HAlign::Center)
-		value = QStringLiteral("center");
-	else
-		value = QStringLiteral("end");
-	
-	auto &ns = tag_->ns();
-	auto *tag = GetTag(ods::style::tag::ParagraphProps);
-	tag->AttrSet(ns.fo(), ods::style::kTextAlign, value);
-	tag->AttrSet(ns.fo(), ods::style::kMarginLeft, "0in");
+	time_style_ = r;
+	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, r->name());
 }
 
 void

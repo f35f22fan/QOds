@@ -62,6 +62,9 @@ public:
 	
 	QString*
 	AsString() const { return (QString*) data_; }
+
+	QTime*
+	AsTime() const { return (QTime*) data_; }
 	
 	void
 	CopyTo(ods::Value&);
@@ -135,6 +138,9 @@ public:
 	
 	void
 	SetString(const QString &s);
+
+	void
+	SetTime(const QTime &r);
 	
 	QString
 	toString() const;

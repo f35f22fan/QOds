@@ -59,6 +59,8 @@ Value::CopyTo(ods::Value &v)
 		v.SetPercentage(*AsPercentage());
 	else if (IsDate())
 		v.SetDate(*AsDate());
+	else if (IsTime())
+		v.SetTime(*AsTime());
 	else
 		mtl_warn("Not implemented");
 }
@@ -74,6 +76,8 @@ Value::DeleteData()
 		delete AsString();
 	else if (IsDate())
 		delete AsDate();
+	else if (IsTime())
+		delete AsTime();
 	data_ = nullptr;
 	type_ = ods::Type::NotSet;
 }
@@ -123,6 +127,16 @@ Value::Read(ods::Ns &ns, ods::Attrs &attrs)
 		}
 		auto dt = QDateTime::fromString(custom_attr->value(), Qt::ISODate);
 		set(new QDateTime(dt), type_);
+	} else if (IsTime()) {
+		auto *custom_attr = attrs.Get(ns.office(), ods::ns::kTimeValue);
+		if (custom_attr == nullptr)
+		{
+			mtl_warn("custom_attr == nullptr");
+			return;
+		}
+		auto d = ods::Duration::FromString(custom_attr->value());
+		auto *t = new QTime(d.hours(), d.minutes(), d.seconds());
+		set(t, type_);
 	} else {
 		type_ = ods::Type::NotSet;
 	}
@@ -183,6 +197,14 @@ Value::SetString(const QString &s)
 	*AsString() = s;
 }
 
+void
+Value::SetTime(const QTime &r)
+{
+	DeleteData();
+	type_ = ods::Type::Time;
+	data_ = new QTime(r.hour(), r.minute(), r.second(), r.msec());
+}
+
 QString
 Value::toString() const
 {
@@ -197,6 +219,8 @@ Value::toString() const
 		return AsDate()->toString(Qt::ISODate);
 	if (IsCurrency())
 		mtl_qline("Currency not supported yet");
+	if (IsTime())
+		return AsTime()->toString(Qt::ISODate);
 	
 	return "";
 }

@@ -100,14 +100,17 @@ Tag::GetSubtag(ods::Prefix &prefix, const char *name)
 }
 
 ods::Tag*
-Tag::GetSubtag(ods::tag::func f)
+Tag::GetSubtag(ods::tag::func f, const qint8 id_num)
 {
 	foreach (auto *node, subnodes_) {
 		if (!node->IsTag())
 			continue;
 		auto *tag = node->Tag();
-		if (tag->func() == f)
-			return tag;
+		if (tag->func() != f)
+			continue;
+		if (id_num >= 0 && tag->id_num() != id_num)
+			continue;
+		return tag;
 	}
 	return nullptr;
 }
