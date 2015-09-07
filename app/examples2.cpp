@@ -190,7 +190,7 @@ Lesson14_ReadDate()
 		qDebug() << "No row at " << kRowIndex;
 		return;
 	}
-	const int kColIndex = 0;
+	const int kColIndex = 1;
 	auto *cell = row->cell(kColIndex);
 
 	if (cell == nullptr)
@@ -245,7 +245,7 @@ Lesson15_WriteDates()
 
 	ods::DateInfo info2;
 	info2.order_set(ods::dateinfo::Order::MONTH_DAY_YEAR);
-	info2.separator_set(ods::dateinfo::Separator::COMMA);
+	info2.separator_set(ods::dateinfo::Separator::FWD_SLASH);
 	auto *style2 = book.CreateStyle(info2);
 
 	cell = row->CreateCell(col++);
@@ -262,9 +262,9 @@ Lesson15_WriteDates()
 }
 
 void
-Lesson16_ReadTime()
+Lesson16_ReadDuration()
 {
-	auto path = QDir(QDir::homePath()).filePath("ReadTime.ods");
+	auto path = QDir(QDir::homePath()).filePath("ReadDuration.ods");
 	QFile file(path);
 	if (!file.exists())
 	{
@@ -297,25 +297,24 @@ Lesson16_ReadTime()
 	}
 	auto &value = cell->value();
 
-	if (!value.IsTime())
+	if (!value.IsDuration())
 	{
 		qDebug() << "cell at (" << kRowIndex << "," << kColIndex
-			<< ") is not a time cell";
+			<< ") is not a duration cell";
 		return;
 	}
-	QTime *t = value.AsTime();
+	ods::Duration *t = value.AsDuration();
 
 	if (t == nullptr)
 	{
-		qDebug() << "QTime is nullptr";
+		qDebug() << "ods::Duration is nullptr";
 		return;
 	}
-	const QLatin1String format("HH:mm:ss");
-	qDebug().nospace() << "time (" << format << "): " << t->toString(format);
+	qDebug().nospace() << "Duration: " << t->ToString();
 }
 
 void
-Lesson17_WriteTimes()
+Lesson17_WriteDuration()
 {
 	ods::Book book;
 	auto *sheet = book.CreateSheet("Sheet1");
@@ -324,15 +323,18 @@ Lesson17_WriteTimes()
 	qint32 col = 0;
 
 	auto *cell = row->CreateCell(col++);
-	cell->SetValue(QTime(23, 12, 40));
+	// if no style specified, defaults to "HH:mm" (no seconds displayed)
+	cell->SetValue(ods::Duration(50, 12, 40)); // 50 hours, 12 min, 40 sec
 
-	// now, set order explicitly
-	ods::TimeInfo info;
-	info.order_set(ods::timeinfo::Order::HOURS_MINUTES_SECONDS);
+	// now, set order explicitly to show seconds as well:
+	ods::DurationInfo info;
+	info.order_set(ods::duration::Order::HOURS_MINUTES_SECONDS);
+	info.truncate_on_overflow_set(true); // wraps by 24hours, so 32 hours
+	//will show up as 8 hours, default is false.
 	ods::Style *style = book.CreateStyle(info);
 
 	cell = row->CreateCell(col++);
-	cell->SetValue(QTime(10, 59, 50), style);
+	cell->SetValue(ods::Duration(32, 59, 50), style); // 32h, 59m, 50s
 
 	Save(book);
 }

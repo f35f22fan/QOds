@@ -158,7 +158,7 @@ enum class Type : quint8
 	Fail, // default
 	NotSet,
 	Percentage,
-	Time,
+	Duration,
 	String
 };
 

@@ -1,5 +1,5 @@
-#ifndef ODS_STYLE_TIME_HPP_
-#define ODS_STYLE_TIME_HPP_
+#ifndef ODS_STYLE_DURATION_HPP_
+#define ODS_STYLE_DURATION_HPP_
 
 #include "../decl.hxx"
 #include "../err.hpp"
@@ -11,11 +11,11 @@
 namespace ods	{ // ods::
 namespace style	{ // ods::style::
 
-class ODS_API Time
+class ODS_API Duration
 {
 public:
-	Time(ods::Book*, const ods::StylePlace);
-	virtual ~Time();
+	Duration(ods::Book*, const ods::StylePlace);
+	virtual ~Duration();
 
 	void
 	AddHours();
@@ -29,20 +29,20 @@ public:
 	void
 	AddSeparator(const qint8 id);
 
-	const ods::TimeInfo*
+	const ods::DurationInfo*
 	info() const { return info_; }
 
 	const QString&
 	name() const { return name_; }
 
 	void
-	SetInfo(const ods::TimeInfo &info);
+	SetInfo(const ods::DurationInfo &info);
 
 	ods::Tag*
 	tag() const { return tag_; }
 
 private:
-	NO_ASSIGN_COPY_MOVE(Time);
+	NO_ASSIGN_COPY_MOVE(Duration);
 
 	ods::Tag*
 	GetTag(ods::tag::func f, const qint8 id_num = -1);
@@ -54,7 +54,7 @@ private:
 	SetUniqueName();
 
 	ods::Book			*book_ = nullptr;
-	ods::TimeInfo		*info_ = nullptr;
+	ods::DurationInfo	*info_ = nullptr;
 	QString				name_;
 	ods::StylePlace		place_;
 	ods::Tag			*tag_ = nullptr;

@@ -34,9 +34,10 @@ class ODS_API Duration
 {
 public:
 	Duration();
+	Duration(const qint32 hours, const qint32 minutes, const qint32 seconds);
 	virtual ~Duration();
 	
-	Duration(const Duration &rhs);
+	Duration(const ods::Duration &rhs);
 	
 	operator QString();
 	

@@ -308,6 +308,7 @@ NumberTimeStyle(ods::Ns &ns, ods::Tag *tag)
 		return tag;
 	}
 	tag->Add(ns.style(), ods::ns::kName);
+	tag->Add(ns.number(), ods::style::kTruncateOnOverflow);
 	tag->SubfuncAdd(ods::style::tag::NumberHours);
 	tag->SubfuncAdd(ods::style::tag::NumberMinutes);
 	tag->SubfuncAdd(ods::style::tag::NumberSeconds);

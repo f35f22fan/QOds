@@ -30,19 +30,22 @@ namespace ods	{
 Duration::Duration()
 {}
 
+Duration::Duration(const qint32 h, const qint32 m, const qint32 s)
+	: hours_(h), minutes_(m), seconds_(s)
+{}
+
 Duration::~Duration()
 {}
 
-Duration::Duration(const Duration &rhs)
+Duration::Duration(const ods::Duration &rhs)
 {
 	years_set(rhs.years());
 	months_set(rhs.months());
 	days_set(rhs.days());
 	hours_set(rhs.hours());
-	minutes_set(rhs.seconds());
+	minutes_set(rhs.minutes());
 	seconds_set(rhs.seconds());
 	valid_set(rhs.valid());
-	qDebug() << "Called copy ctor";
 }
 
 Duration::operator QString()

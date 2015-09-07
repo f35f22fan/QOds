@@ -17,10 +17,10 @@ void
 Lesson15_WriteDates();
 
 void
-Lesson16_ReadTime();
+Lesson16_ReadDuration();
 
 void
-Lesson17_WriteTimes();
+Lesson17_WriteDuration();
 
 
 #endif

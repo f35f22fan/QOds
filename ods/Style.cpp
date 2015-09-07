@@ -27,12 +27,12 @@
 #include "style/Border.hpp"
 #include "style/Currency.hpp"
 #include "style/Date.hpp"
+#include "style/Duration.hpp"
 #include "style/Manager.hpp"
 #include "style/Percent.hpp"
 #include "style/style.hxx"
 #include "style/tag.hh"
 #include "style/StyleFamily.hpp"
-#include "style/Time.hpp"
 #include "Tag.hpp"
 
 namespace ods	{ // ods::
@@ -137,11 +137,11 @@ Style::GetPercentStyle()
 	return nullptr;
 }
 
-ods::style::Time*
-Style::GetTimeStyle()
+ods::style::Duration*
+Style::GetDurationStyle()
 {
-	if (time_style_ != nullptr)
-		return time_style_;
+	if (duration_style_ != nullptr)
+		return duration_style_;
 
 	auto &ns = tag_->ns();
 	const QString *name = tag_->GetAttrString(ns.style(),
@@ -149,9 +149,9 @@ Style::GetTimeStyle()
 	if (name == nullptr)
 		return nullptr;
 
-	auto *time_style = book_->GetTimeStyle(*name);
-	if (time_style != nullptr)
-		return time_style;
+	auto *duration_style = book_->GetDurationStyle(*name);
+	if (duration_style != nullptr)
+		return duration_style;
 	mtl_line("Style not found");
 	return nullptr;
 }
@@ -235,6 +235,13 @@ void
 Style::SetDateStyle(ods::style::Date *r)
 {
 	date_style_ = r;
+	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, r->name());
+}
+
+void
+Style::SetDurationStyle(ods::style::Duration *r)
+{
+	duration_style_ = r;
 	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, r->name());
 }
 
@@ -375,13 +382,6 @@ Style::SetTextColor(const QColor &color)
 	auto &ns = tag_->ns();
 	auto *tag = GetTag(ods::style::tag::TextProps);
 	tag->AttrSet(ns.fo(), ods::style::kColor, text_color_.name(QColor::HexRgb));
-}
-
-void
-Style::SetTimeStyle(ods::style::Time *r)
-{
-	time_style_ = r;
-	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, r->name());
 }
 
 void

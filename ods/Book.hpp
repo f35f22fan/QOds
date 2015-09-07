@@ -63,7 +63,7 @@ public:
 	CreateStyle(const ods::DateInfo &info);
 
 	ods::Style*
-	CreateStyle(const ods::TimeInfo &info);
+	CreateStyle(const ods::DurationInfo &info);
 	
 	ods::style::Percent*
 	CreatePercentStyle(const ods::StylePlace place
@@ -125,11 +125,11 @@ public:
 	ods::Style*
 	GetStyle(const QString &name, const ods::StyleFamilyId id);
 
-	ods::style::Time*
-	GetTimeStyle(const QString &name);
+	ods::style::Duration*
+	GetDurationStyle(const QString &name);
 
-	ods::style::Time*
-	GetTimeStyle(const ods::TimeInfo*);
+	ods::style::Duration*
+	GetDurationStyle(const ods::DurationInfo*);
 	
 	void
 	InitDefault();
@@ -175,8 +175,8 @@ private:
 	CreateDateStyle(const ods::StylePlace place
 		= ods::StylePlace::ContentFile);
 
-	ods::style::Time*
-	CreateTimeStyle(const ods::StylePlace place
+	ods::style::Duration*
+	CreateDurationStyle(const ods::StylePlace place
 		= ods::StylePlace::ContentFile);
 	
 	void
@@ -196,6 +196,7 @@ private:
 	QVector<ods::style::Date*> date_styles_;
 	const bool				dev_mode_ = false;
 	QVector<ods::DrawFrame*>	draw_frames_;
+	QVector<ods::style::Duration*> duration_styles_;
 	QString					err_;
 	QStringList				extracted_file_paths_;
 	ods::Manifest			*manifest_ = nullptr;
@@ -207,7 +208,6 @@ private:
 	QVector<ods::style::Percent*> percent_styles_;
 	QTemporaryDir			temp_dir_;
 	QString					temp_dir_path_;
-	QVector<ods::style::Time*> time_styles_;
 };
 
 } // namespace ods

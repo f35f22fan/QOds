@@ -17,7 +17,8 @@ enum class Order : quint8 {
 
 enum class Separator : quint8 {
 	DOT,
-	COMMA
+	COMMA,
+	FWD_SLASH
 };
 
 } // ods::dateinfo::

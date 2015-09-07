@@ -36,8 +36,8 @@ main(int argc, char *argv[])
 
 	//Lesson14_ReadDate();
 	//Lesson15_WriteDates();
-	Lesson16_ReadTime();
-	//Lesson17_WriteTimes();
+	//Lesson16_ReadDuration();
+	Lesson17_WriteDuration();
 	
 	return 0;
 }

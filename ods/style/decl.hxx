@@ -7,10 +7,10 @@ namespace style	{ // ods::style::
 class Border;
 class Currency;
 class Date;
+class Duration;
 class Manager;
 class Percent;
 class StyleFamily;
-class Time;
 
 } // ods::style::
 } // ods::

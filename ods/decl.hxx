@@ -18,7 +18,7 @@ class Settings;
 class Sheet;
 class Style;
 class Tag;
-class TimeInfo;
+class DurationInfo;
 
 } // ods::
 

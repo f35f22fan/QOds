@@ -37,6 +37,8 @@ DateInfo::SeparatorAsString() const
 {
 	if (separator_ == ods::dateinfo::Separator::DOT)
 		return QLatin1String(".");
+	else if (separator_ == ods::dateinfo::Separator::FWD_SLASH)
+		return QLatin1String("/");
 	return QLatin1String(",");
 }
 

@@ -25,6 +25,7 @@
 #include "CurrencyInfo.hpp"
 #include "DateInfo.hpp"
 #include "DrawFrame.hpp"
+#include "DurationInfo.hpp"
 #include "filename.hxx"
 #include "Manifest.hpp"
 #include "Meta.hpp"
@@ -34,14 +35,14 @@
 #include "Style.hpp"
 #include "style/Currency.hpp"
 #include "style/Date.hpp"
+#include "style/Duration.hpp"
 #include "style/Manager.hpp"
 #include "style/Percent.hpp"
 #include "style/StyleFamily.hpp"
 #include "style/tag.hh"
-#include "style/Time.hpp"
 #include "Tag.hpp"
 #include "tag.hh"
-#include "TimeInfo.hpp"
+
 #include <QFile>
 #include <QXmlStreamWriter>
 #include <quazip/JlCompress.h>
@@ -173,13 +174,13 @@ Book::CreateStyle(const ods::DateInfo &info)
 }
 
 ods::Style*
-Book::CreateStyle(const ods::TimeInfo &info)
+Book::CreateStyle(const ods::DurationInfo &info)
 {
 	auto *style = CreateStyle(ods::StyleFamilyId::Cell,
 		ods::StylePlace::ContentFile);
-	auto *time_style = CreateTimeStyle(ods::StylePlace::ContentFile);
-	style->SetTimeStyle(time_style);
-	time_style->SetInfo(info);
+	auto *duration_style = CreateDurationStyle(ods::StylePlace::ContentFile);
+	style->SetDurationStyle(duration_style);
+	duration_style->SetInfo(info);
 	return style;
 }
 
@@ -213,18 +214,18 @@ Book::CreateStyle(const ods::StyleFamilyId id, const ods::StylePlace place)
 	return CreateStyle(id, place, ods::style::tag::Style);
 }
 
-ods::style::Time*
-Book::CreateTimeStyle(const ods::StylePlace place)
+ods::style::Duration*
+Book::CreateDurationStyle(const ods::StylePlace place)
 {
 	if (content_ == nullptr)
 		InitDefault();
-	auto *time_style = new ods::style::Time(this, place);
-	time_styles_.append(time_style);
+	auto *duration_style = new ods::style::Duration(this, place);
+	duration_styles_.append(duration_style);
 	auto *parent_tag = (place == ods::StylePlace::StylesFile) ?
 		style_manager_->styles_tag() : content_->automatic_styles_tag();
-	auto *tag = time_style->tag();
+	auto *tag = duration_style->tag();
 	parent_tag->subnodes().append(new ods::Node(tag));
-	return time_style;
+	return duration_style;
 }
 
 ods::style::Currency*
@@ -339,16 +340,16 @@ Book::GetStyle(const QString &name, const ods::StyleFamilyId id)
 	return nullptr;
 }
 
-ods::style::Time*
-Book::GetTimeStyle(const ods::TimeInfo *info)
+ods::style::Duration*
+Book::GetDurationStyle(const ods::DurationInfo *info)
 {
 	if (info == nullptr)
 	{
-		if (time_styles_.isEmpty())
+		if (duration_styles_.isEmpty())
 			return nullptr;
-		return time_styles_[0];
+		return duration_styles_[0];
 	}
-	foreach (auto *item, time_styles_)
+	foreach (auto *item, duration_styles_)
 	{
 		if (item->info() == nullptr)
 			continue;
@@ -358,10 +359,10 @@ Book::GetTimeStyle(const ods::TimeInfo *info)
 	return nullptr;
 }
 
-ods::style::Time*
-Book::GetTimeStyle(const QString &name)
+ods::style::Duration*
+Book::GetDurationStyle(const QString &name)
 {
-	foreach (auto *item, time_styles_)
+	foreach (auto *item, duration_styles_)
 	{
 		if (name == item->name())
 			return item;

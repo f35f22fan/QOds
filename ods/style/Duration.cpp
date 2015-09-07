@@ -1,7 +1,7 @@
-#include "Time.hpp"
+#include "Duration.hpp"
 
 #include "../Book.hpp"
-#include "../TimeInfo.hpp"
+#include "../DurationInfo.hpp"
 #include "../Ns.hpp"
 #include "Manager.hpp"
 #include "style.hxx"
@@ -11,7 +11,7 @@
 namespace ods	{ // ods::
 namespace style	{ // ods::style::
 
-Time::Time(ods::Book *book,
+Duration::Duration(ods::Book *book,
 	const ods::StylePlace place) :
 	book_(book),
 	place_(place)
@@ -22,14 +22,14 @@ Time::Time(ods::Book *book,
 	Init();
 }
 
-Time::~Time()
+Duration::~Duration()
 {
 	if (info_ != nullptr)
 		delete info_;
 }
 
 void
-Time::AddHours()
+Duration::AddHours()
 {
 	auto *day_tag = GetTag(ods::style::tag::NumberHours);
 	day_tag->AttrSet(tag_->ns().number(), ods::ns::kStyle,
@@ -37,7 +37,7 @@ Time::AddHours()
 }
 
 void
-Time::AddMinutes()
+Duration::AddMinutes()
 {
 	auto *day_tag = GetTag(ods::style::tag::NumberMinutes);
 	day_tag->AttrSet(tag_->ns().number(), ods::ns::kStyle,
@@ -45,7 +45,7 @@ Time::AddMinutes()
 }
 
 void
-Time::AddSeconds()
+Duration::AddSeconds()
 {
 	auto *day_tag = GetTag(ods::style::tag::NumberSeconds);
 	day_tag->AttrSet(tag_->ns().number(), ods::ns::kStyle,
@@ -53,7 +53,7 @@ Time::AddSeconds()
 }
 
 void
-Time::AddSeparator(const qint8 id)
+Duration::AddSeparator(const qint8 id)
 {
 	auto *sep_tag1 = GetTag(ods::tag::NumberText, id);
 	const QString separator = info_->SeparatorAsString();
@@ -61,7 +61,7 @@ Time::AddSeparator(const qint8 id)
 }
 
 ods::Tag*
-Time::GetTag(ods::tag::func f, const qint8 id_num)
+Duration::GetTag(ods::tag::func f, const qint8 id_num)
 {
 	auto *tag = tag_->GetSubtag(f, id_num);
 	if (tag != nullptr)
@@ -73,17 +73,17 @@ Time::GetTag(ods::tag::func f, const qint8 id_num)
 }
 
 void
-Time::Init()
+Duration::Init()
 {
 	SetUniqueName();
 }
 
 
 void
-Time::SetInfo(const ods::TimeInfo &info)
+Duration::SetInfo(const ods::DurationInfo &info)
 {
 	if (info_ == nullptr)
-		info_ = new ods::TimeInfo();
+		info_ = new ods::DurationInfo();
 	info_->CopyFrom(info);
 
 	/**
@@ -101,31 +101,34 @@ Time::SetInfo(const ods::TimeInfo &info)
 	};
 	**/
 	const auto order = info_->order();
-	if (order == ods::timeinfo::Order::HOURS_MINUTES)
+	if (order == ods::duration::Order::HOURS_MINUTES)
 	{
 		AddHours();
 		AddSeparator(0);
 		AddMinutes();
-	} else if (order == ods::timeinfo::Order::HOURS_MINUTES_SECONDS) {
+	} else if (order == ods::duration::Order::HOURS_MINUTES_SECONDS) {
 		AddHours();
 		AddSeparator(0);
 		AddMinutes();
 		AddSeparator(1);
 		AddSeconds();
 	}
+
+	QString s = info_->truncate_on_overflow() ? "true" : "false";
+	tag_->AttrSet(tag_->ns().number(), ods::style::kTruncateOnOverflow, s);
 }
 
 void
-Time::SetUniqueName()
+Duration::SetUniqueName()
 {
 	const QString base = (place_ == ods::StylePlace::StylesFile) ?
-		QLatin1String("time_st") : QLatin1String("time_cn");
+		QLatin1String("duration_st") : QLatin1String("duration_cn");
 
 	int i = 0;
 	while (true)
 	{
 		name_ = base + QString::number(i++);
-		if (book_->GetTimeStyle(name_) == nullptr)
+		if (book_->GetDurationStyle(name_) == nullptr)
 			break;
 	}
 	tag_->AttrSet(tag_->ns().style(), ods::ns::kName, name_);

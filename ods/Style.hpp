@@ -73,8 +73,8 @@ public:
 	ods::Tag*
 	GetTag(ods::tag::func f);
 
-	ods::style::Time*
-	GetTimeStyle();
+	ods::style::Duration*
+	GetDurationStyle();
 	
 	const QString&
 	name() { return name_; }
@@ -129,7 +129,7 @@ public:
 	SetTextColor(const QColor &color);
 
 	void
-	SetTimeStyle(ods::style::Time*);
+	SetDurationStyle(ods::style::Duration*);
 	
 	void
 	SetVAlignment(const ods::VAlign a);
@@ -153,6 +153,7 @@ private:
 	ods::Book				*book_ = nullptr;
 	ods::style::Currency	*currency_style_ = nullptr;
 	ods::style::Date		*date_style_ = nullptr;
+	ods::style::Duration	*duration_style_ = nullptr;
 	QString					font_name_;
 	double					font_size_ = -1.0;
 	ods::FontSizeType		font_size_type_ = ods::FontSizeType::NotSet;
@@ -162,7 +163,6 @@ private:
 	ods::StylePlace			place_;
 	ods::style::StyleFamily	*style_family_ = nullptr;
 	ods::Tag				*tag_ = nullptr;
-	ods::style::Time		*time_style_ = nullptr;
 	QColor					text_color_;
 };
 

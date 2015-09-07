@@ -57,14 +57,14 @@ public:
 	double*
 	AsDouble() const { return (double*) data_; }
 
+	ods::Duration*
+	AsDuration() const { return (ods::Duration*) data_; }
+
 	double*
 	AsPercentage() const { return AsDouble(); }
 	
 	QString*
 	AsString() const { return (QString*) data_; }
-
-	QTime*
-	AsTime() const { return (QTime*) data_; }
 	
 	void
 	CopyTo(ods::Value&);
@@ -92,15 +92,15 @@ public:
 	
 	bool
 	IsDouble() const { return type_ == ods::Type::Double; }
-	
+
+	bool
+	IsDuration() const { return type_ == ods::Type::Duration; }
+
 	bool
 	IsPercentage() const { return type_ == ods::Type::Percentage; }
 	
 	bool
 	IsString() const { return type_ == ods::Type::String; }
-	
-	bool
-	IsTime() const { return type_ == ods::Type::Time; }
 	
 	bool
 	NoValue() const { return data_ == nullptr; }
@@ -134,13 +134,13 @@ public:
 	SetDouble(const double d);
 
 	void
+	SetDuration(const ods::Duration &r);
+
+	void
 	SetPercentage(const double d);
 	
 	void
 	SetString(const QString &s);
-
-	void
-	SetTime(const QTime &r);
 	
 	QString
 	toString() const;

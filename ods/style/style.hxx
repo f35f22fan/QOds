@@ -147,6 +147,7 @@ ods_const kTextUnderlineColor	= "text-underline-color";
 ods_const kTextUnderlineStyle	= "text-underline-style";
 ods_const kTextUnderlineWidth	= "text-underline-width";
 ods_const kTimeStyle			= "time-style";
+ods_const kTruncateOnOverflow	= "truncate-on-overflow";
 ods_const kUseOptimalRowHeight	= "use-optimal-row-height";
 ods_const kVerticalAlign		= "vertical-align";
 ods_const kWidth				= "width";

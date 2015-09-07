@@ -26,14 +26,15 @@
 #include "CurrencyInfo.hpp"
 #include "DateInfo.hpp"
 #include "DrawFrame.hpp"
+#include "DurationInfo.hpp"
 #include "Formula.hpp"
 #include "Node.hpp"
 #include "Ns.hpp"
 #include "ods.hh"
 #include "style/Currency.hpp"
 #include "style/Date.hpp"
+#include "style/Duration.hpp"
 #include "style/Percent.hpp"
-#include "style/Time.hpp"
 #include "Row.hpp"
 #include "Sheet.hpp"
 #include "style/style.hxx"
@@ -41,7 +42,6 @@
 #include "Style.hpp"
 #include "tag.hh"
 #include "Tag.hpp"
-#include "TimeInfo.hpp"
 #include "util.hh"
 #include "Value.hpp"
 
@@ -389,14 +389,14 @@ Cell::SetValue(const QDateTime &dt, ods::Style *style)
 }
 
 void
-Cell::SetValue(const QTime &t, ods::Style *style)
+Cell::SetValue(const ods::Duration &t, ods::Style *style)
 {
 	auto &ns = tag_->ns();
 
 	if (style == nullptr)
 	{
-		// create and use a time style with default values
-		ods::TimeInfo info;
+		// create and use a duration style with default values
+		ods::DurationInfo info;
 		style = row_->sheet()->book()->CreateStyle(info);
 	}
 
@@ -404,18 +404,18 @@ Cell::SetValue(const QTime &t, ods::Style *style)
 
 	tag_->AttrSet(ns.office(), ods::ns::kValueType, ods::ns::kTime);
 	ods::Duration d;
-	d.hours_set(t.hour());
-	d.minutes_set(t.minute());
-	d.seconds_set(t.second());
+	d.hours_set(t.hours());
+	d.minutes_set(t.minutes());
+	d.seconds_set(t.seconds());
 	tag_->AttrSet(ns.office(), ods::ns::kTimeValue, d.ToString());
 
-	ods::style::Time *time = style->GetTimeStyle();
-	if (time == nullptr)
+	ods::style::Duration *duration = style->GetDurationStyle();
+	if (duration == nullptr)
 	{
-		mtl_line("time = null");
+		mtl_line("duration = null");
 		return;
 	}
-	const ods::TimeInfo *info = time->info();
+	const ods::DurationInfo *info = duration->info();
 	if (info == nullptr)
 	{
 		mtl_line("info = null");
