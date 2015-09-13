@@ -59,7 +59,7 @@ Attrs::Clone()
 void
 Attrs::Delete(ods::Prefix &prefix, const char *name)
 {
-	for (int i = 0; i <= attrs_.size(); i++)
+	for (int i = 0; i < attrs_.size(); i++)
 	{
 		auto *attr = attrs_[i];
 		ods::Prefix &curr_prefix = attr->prefix();
