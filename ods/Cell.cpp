@@ -344,8 +344,7 @@ Cell::SetStyle(ods::Style *style)
 {
 	if (style_ != nullptr && style_->GetPercentStyle() != nullptr)
 	{
-		qDebug() << "Warning at Cell::SetStyle(..): call cell->SetStyle(..)"
-			<< "before calling cell->SetPercentageValue(..)";
+		mtl_warn("Call cell->SetStyle(..) before calling cell->SetPercentageValue(..)");
 		style_->SetParentStyle(style);
 	} else {
 		style_ = style;

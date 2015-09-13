@@ -21,6 +21,7 @@
  */
 
 #include "Duration.hpp"
+#include "err.hpp"
 
 #include <QtCore/QDebug>
 #include <QtCore/QStringRef>
@@ -36,6 +37,49 @@ Duration::Duration(const qint32 h, const qint32 m, const qint32 s)
 
 Duration::~Duration()
 {}
+
+void
+Duration::Decode(const QString &str)
+{
+	int last_offset = 1;
+	int i = last_offset+1;
+	bool is_month = true;
+	bool ok;
+
+	for (; i <= str.size(); i++) {
+
+		QStringRef s(&str, last_offset, i - last_offset);
+		int n = s.toInt(&ok);
+		if (ok)
+			continue;
+		s = QStringRef(&str, last_offset, i - last_offset - 1);
+		n = s.toInt(&ok);
+		last_offset = i;
+		const QChar c = str.at(i - 1);
+
+		if (c == 'Y') {
+			years_ = n;
+		} else if (c == 'M') {
+			if (is_month) {
+				months_ = n;
+			} else {
+				minutes_ = n;
+			}
+		} else if (c == 'D') {
+			days_ = n;
+		} else if (c == 'H') {
+			hours_ = n;
+		} else if (c == 'S') {
+			seconds_ = n;
+		} else if (c == 'T') {
+			is_month = false;
+		} else {
+			mtl_warn("unknown char");
+			return;
+		}
+	}
+	valid_ = true;
+}
 
 Duration::Duration(const ods::Duration &rhs)
 {
@@ -67,52 +111,6 @@ Duration::operator QString()
 	return s;
 }
 
-Duration // string ex. "PT1H55M45S"
-Duration::FromString(const QString &str)
-{
-	Duration d;
-	int last_offset = 1;
-	int i = last_offset+1;
-	bool is_month = true;
-	bool ok;
-	
-	for (; i <= str.size(); i++) {
-		
-		QStringRef s(&str, last_offset, i-last_offset);
-		int n = s.toInt(&ok);
-		if (ok) {
-			continue;
-		}
-		s = QStringRef(&str, last_offset, i-last_offset-1);
-		n = s.toInt(&ok);
-		last_offset = i;
-		const QChar c = str.at(i-1);
-		
-		if (c == 'Y') {
-			d.years_set(n);
-		} else if (c == 'M') {
-			if (is_month) {
-				d.months_set(n);
-			} else {
-				d.minutes_set(n);
-			}
-		} else if (c == 'D') {
-			d.days_set(n);
-		} else if (c == 'H') {
-			d.hours_set(n);
-		} else if (c == 'S') {
-			d.seconds_set(n);
-		} else if (c == 'T') {
-			is_month = false;
-		} else {
-			qDebug() << "unknown char:" << c;
-			return d;
-		}
-	}
-	d.valid_set(true);
-	return d;
-}
-
 QString
 Duration::ToString() const
 {
@@ -126,4 +124,4 @@ Duration::ToString() const
 	return str;
 }
 
-} // namespace ods
+} // ods::

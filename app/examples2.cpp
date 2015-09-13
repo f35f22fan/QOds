@@ -36,8 +36,8 @@ Lesson11_CreateFormulaWithPercentage()
 	cell3->SetFormula(formula);
 	// Notes:
 	// SetPercentageType(..) just like SetPercentageValue(..) under the hood
-	// apply a style to the cell so after calling this method you
-	// should use the existing style instead of setting a new one.
+	// apply a style to the cell so after calling SetFormula(..) you
+	// should use the existing cell style instead of setting a new one.
 	// SetPercentageType(1) sets cell type to "percentage", one decimal place
 	// after the dot, defaults to zero
 	cell3->SetPercentageType(1);
@@ -56,54 +56,7 @@ Lesson11_CreateFormulaWithPercentage()
 }
 
 void
-Lesson12_CreateCurrency()
-{
-	ods::Book book;
-	auto *sheet = book.CreateSheet("Sheet1");
-	auto *row = sheet->CreateRow(0);
-
-	auto *cell = row->CreateCell(0);
-	cell->SetCurrencyValue(524); // defaults to "EUR" (euros)
-
-	// set to euros (shows "€" instead of "EUR"), Germany,
-	// German, with 3 decimal places
-	// see file i18n.hxx for details.
-	ods::CurrencyInfo info;
-	info.currency_set(ods::i18n::kEuro);
-	info.show_symbol_set(true);
-	info.country_set(ods::i18n::kGermany);
-	info.language_set(ods::i18n::kGerman);
-	info.decimal_places_set(3);
-
-	ods::Style *style = book.CreateStyle(info);
-	row->CreateCell(1)->SetCurrencyValue(1008.94, style);
-	row->CreateCell(2)->SetCurrencyValue(0.402, style);
-
-	// set to "USD" (shows "USD" instead of "$"), USA, English
-	// with 1 decimal place
-	info.currency_set(ods::i18n::kUSD);
-	info.show_symbol_set(false);
-	info.country_set(ods::i18n::kUSA);
-	info.language_set(ods::i18n::kEnglish);
-	info.decimal_places_set(1);
-	delete style;
-	style = book.CreateStyle(info);
-	row = sheet->CreateRow(1);
-	row->CreateCell(0)->SetCurrencyValue(4.2, style);
-	row->CreateCell(1)->SetCurrencyValue(102.3, style);
-	row->CreateCell(2)->SetCurrencyValue(60, style);
-
-	row = sheet->CreateRow(2);
-	// add a few non-currency values:
-	row->CreateCell(0)->SetValue("Non currency cells: ");
-	row->CreateCell(1)->SetValue("Hello");
-	row->CreateCell(2)->SetValue(40.3);
-
-	Save(book);
-}
-
-void
-Lesson13_ReadCurrency()
+Lesson12_ReadCurrency()
 {
 	auto path = QDir(QDir::homePath()).filePath("Currency.ods");
 	QFile file(path);
@@ -165,6 +118,53 @@ Lesson13_ReadCurrency()
 }
 
 void
+Lesson13_WriteCurrency()
+{
+	ods::Book book;
+	auto *sheet = book.CreateSheet("Sheet1");
+	auto *row = sheet->CreateRow(0);
+
+	auto *cell = row->CreateCell(0);
+	cell->SetCurrencyValue(524); // defaults to "EUR" (euros)
+
+	// set to euros (shows "€" instead of "EUR"), Germany,
+	// German, with 3 decimal places
+	// see file i18n.hxx for details.
+	ods::CurrencyInfo info;
+	info.currency_set(ods::i18n::kEuro);
+	info.show_symbol_set(true);
+	info.country_set(ods::i18n::kGermany);
+	info.language_set(ods::i18n::kGerman);
+	info.decimal_places_set(3);
+
+	ods::Style *style = book.CreateStyle(info);
+	row->CreateCell(1)->SetCurrencyValue(1008.94, style);
+	row->CreateCell(2)->SetCurrencyValue(0.402, style);
+
+	// set to "USD" (shows "USD" instead of "$"), USA, English
+	// with 1 decimal place
+	info.currency_set(ods::i18n::kUSD);
+	info.show_symbol_set(false);
+	info.country_set(ods::i18n::kUSA);
+	info.language_set(ods::i18n::kEnglish);
+	info.decimal_places_set(1);
+
+	auto *style2 = book.CreateStyle(info);
+	row = sheet->CreateRow(1);
+	row->CreateCell(0)->SetCurrencyValue(4.2, style2);
+	row->CreateCell(1)->SetCurrencyValue(102.3, style2);
+	row->CreateCell(2)->SetCurrencyValue(60, style2);
+
+	row = sheet->CreateRow(2);
+	// add a few non-currency values:
+	row->CreateCell(0)->SetValue("Non currency cells: ");
+	row->CreateCell(1)->SetValue("Hello");
+	row->CreateCell(2)->SetValue(40.3);
+
+	Save(book);
+}
+
+void
 Lesson14_ReadDate()
 {
 	auto path = QDir(QDir::homePath()).filePath("ReadDate.ods");
@@ -190,7 +190,7 @@ Lesson14_ReadDate()
 		qDebug() << "No row at " << kRowIndex;
 		return;
 	}
-	const int kColIndex = 1;
+	const int kColIndex = 0;
 	auto *cell = row->cell(kColIndex);
 
 	if (cell == nullptr)
@@ -210,7 +210,7 @@ Lesson14_ReadDate()
 
 	if (dt == nullptr)
 	{
-		qDebug() << "QDateTime is nullptr";
+		qDebug() << "QDateTime = nullptr";
 		return;
 	}
 	const QLatin1String format("dd.MM.yyyy");
@@ -218,14 +218,13 @@ Lesson14_ReadDate()
 }
 
 void
-Lesson15_WriteDates()
+Lesson15_WriteDate()
 {
 	ods::Book book;
 	auto *sheet = book.CreateSheet("Sheet1");
 	auto *row = sheet->CreateRow(0);
 
 	qint32 col = 0;
-
 	auto *cell = row->CreateCell(col++);
 	// when no style specified, defaults to DAY_MONTH_YEAR for order
 	// and to dot as the separator string
@@ -307,7 +306,7 @@ Lesson16_ReadDuration()
 
 	if (t == nullptr)
 	{
-		qDebug() << "ods::Duration is nullptr";
+		qDebug() << "ods::Duration = nullptr";
 		return;
 	}
 	qDebug().nospace() << "Duration: " << t->ToString();
@@ -321,7 +320,6 @@ Lesson17_WriteDuration()
 	auto *row = sheet->CreateRow(0);
 
 	qint32 col = 0;
-
 	auto *cell = row->CreateCell(col++);
 	// if no style specified, defaults to "HH:mm" (no seconds displayed)
 	cell->SetValue(ods::Duration(50, 12, 40)); // 50 hours, 12 min, 40 sec
@@ -329,8 +327,8 @@ Lesson17_WriteDuration()
 	// now, set order explicitly to show seconds as well:
 	ods::DurationInfo info;
 	info.order_set(ods::duration::Order::HOURS_MINUTES_SECONDS);
-	info.truncate_on_overflow_set(true); // wraps by 24hours, so 32 hours
-	//will show up as 8 hours, default is false.
+	info.truncate_on_overflow_set(true); // wraps by 24 hours, so 32 hours
+	// will show up as 8 hours, default is false.
 	ods::Style *style = book.CreateStyle(info);
 
 	cell = row->CreateCell(col++);

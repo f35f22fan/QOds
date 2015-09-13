@@ -34,10 +34,11 @@ main(int argc, char *argv[])
 	qDebug().nospace() << "QOds version: " << ods::version_major() << "."
 		<< ods::version_minor() << "." << ods::version_micro();
 
+	Lesson09_CreateSampleInvoice();
 	//Lesson14_ReadDate();
-	//Lesson15_WriteDates();
+	//Lesson15_WriteDate();
 	//Lesson16_ReadDuration();
-	Lesson17_WriteDuration();
+	//Lesson17_WriteDuration();
 	
 	return 0;
 }

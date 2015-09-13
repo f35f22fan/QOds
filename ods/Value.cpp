@@ -134,8 +134,8 @@ Value::Read(ods::Ns &ns, ods::Attrs &attrs)
 			mtl_warn("custom_attr == nullptr");
 			return;
 		}
-		auto d = ods::Duration::FromString(custom_attr->value());
-		auto *t = new ods::Duration(d);
+		auto *t = new ods::Duration();
+		t->Decode(custom_attr->value());
 		set(t, type_);
 	} else {
 		type_ = ods::Type::NotSet;

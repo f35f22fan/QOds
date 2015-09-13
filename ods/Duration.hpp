@@ -28,7 +28,7 @@
 
 #include "global.hxx"
 
-namespace ods	{
+namespace ods		{ // ods::
 
 class ODS_API Duration
 {
@@ -41,8 +41,8 @@ public:
 	
 	operator QString();
 	
-	static Duration
-	FromString(const QString&);
+	void
+	Decode(const QString &str);
 	
 	qint32
 	years() const { return years_; }

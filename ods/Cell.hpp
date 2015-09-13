@@ -189,7 +189,7 @@ private:
 	void
 	UpdateDrawFrame();
 	
-	qint32			col_start_ = -100;
+	qint32			col_start_ = -1;
 	quint16			num_cols_repeated_ = 1;
 	quint16			num_cols_spanned_ = 1;
 	//quint16		num_matrix_rows_spanned_;

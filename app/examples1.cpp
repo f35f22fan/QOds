@@ -82,6 +82,7 @@ Lesson03_UseFontsAndStyles()
 	auto *cell = row->CreateCell(0);
 	cell->SetValue("string");
 
+	// Note: styles are managed by ods::Book, so never delete styles yourself.
 	auto *style = book.CreateCellStyle();
 	style->SetFontName("Verdana");
 	style->SetFontSize(20.0);
@@ -189,7 +190,7 @@ Lesson07_UsingImages()
 	// Images are set on the sheet relative to a cell
 
 	ods::Book book;
-	auto *sheet = book.CreateSheet("name");
+	auto *sheet = book.CreateSheet("Sheet1");
 	auto *row = sheet->CreateRow(3);
 	auto *cell = row->CreateCell(2);
 
@@ -214,9 +215,9 @@ Lesson08_UsingFormulas()
 {
 	// only very basic formula functionality is supported
 	ods::Book book;
-	auto *sheet = book.CreateSheet("name");
+	auto *sheet = book.CreateSheet("Sheet1");
 
-	for (int i=2; i<10; i++)
+	for (int i = 2; i < 10; i++)
 	{
 		auto *row = sheet->CreateRow(i);
 
@@ -227,9 +228,8 @@ Lesson08_UsingFormulas()
 		cell2->SetValue(i);
 
 		// Create a formula that adds the numbers from cell1 and cell2,
-		// multiplies that sum by two and applies the
-		// resulting formula to cell3.
-		// Schematically the formula looks
+		// multiplies the resulting sum by two and applies the
+		// resulting formula to cell3. Schematically the formula looks
 		// like this: cell3 = "(cell1 + cell2) * 2"
 		auto *formula = new ods::Formula();
 		formula->Add(ods::Grouping::Open);
@@ -272,7 +272,7 @@ Lesson10_ReadFile()
 		return;
 	}
 
-	//print out the values of the first 9 cells of the 3th row:
+	//print out the values of the first 9 cells of the 3rd row:
 	const int kRow = 2;
 	for (int i=0; i <= 8; i++)
 	{
@@ -285,15 +285,14 @@ Lesson10_ReadFile()
 			return;
 		}
 		cell = row->cell(kColumn);
-		QString value_as_string;
-		if (cell == nullptr)
-			value_as_string = "No cell at " + QString::number(kColumn);
-		else
-			value_as_string = GetCellValue(cell);
 
+		if (cell == nullptr) {
+			qDebug() << "No cell at " << QString::number(kColumn);
+			continue;
+		}
 		QString which_cell = "Cell [" + QString::number(kRow)
 			+ ":" + QString::number(kColumn) + "]: ";
-
+		QString value_as_string = GetCellValue(cell);
 		qDebug() << which_cell << value_as_string;
 	}
 }

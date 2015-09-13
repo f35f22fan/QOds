@@ -123,13 +123,13 @@ Style::GetPercentStyle()
 {
 	if (percent_style_ != nullptr)
 		return percent_style_;
-	
+
 	auto &ns = tag_->ns();
 	const QString *name = tag_->GetAttrString(ns.style(),
 		ods::ns::kDataStyleName);
 	if (name == nullptr)
 		return nullptr;
-	
+
 	auto *percent_style = book_->GetPercentStyle(*name);
 	if (percent_style != nullptr)
 		return percent_style;
