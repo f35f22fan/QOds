@@ -4,8 +4,11 @@
  */
 
 #include "gzguts.h"
+#include "zlib.h"
 
-#include <unistd.h>
+#if defined(Z_HAVE_UNISTD_H)
+#  include <unistd.h>
+#endif
 
 /* Local functions */
 local int gz_load OF((gz_statep, unsigned char *, unsigned, unsigned *));
