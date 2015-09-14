@@ -4,7 +4,11 @@
  */
 
 #include "gzguts.h"
-#include <unistd.h>
+#include "zlib.h"
+
+#if defined(Z_HAVE_UNISTD_H)
+#  include <unistd.h>
+#endif
 
 /* Local functions */
 local int gz_init OF((gz_statep));
