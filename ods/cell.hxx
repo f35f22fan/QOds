@@ -33,13 +33,6 @@
 namespace ods	{ // ods::
 namespace cell	{ // ods::cell::
 
-struct Ref
-{
-	qint32		row;
-	qint32		col;
-	//QString		sheet;
-};
-
 enum class Type : quint8
 {
 	Normal,

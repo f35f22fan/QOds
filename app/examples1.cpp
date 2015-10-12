@@ -1,5 +1,4 @@
 #include "examples1.hpp"
-#include "Invoice.hpp"
 #include "util.hpp"
 
 void
@@ -211,9 +210,63 @@ Lesson07_UsingImages()
 }
 
 void
-Lesson08_UsingFormulas()
+Lesson08_ReadFormula()
 {
-	// only very basic formula functionality is supported
+	auto path = QDir(QDir::homePath()).filePath("ReadFormula.ods");
+	QFile file(path);
+	if (!file.exists())
+	{
+		qDebug() << "No such file:" << path;
+		return;
+	}
+	ods::Book book(path);
+	auto *sheet = book.sheet(0);
+
+	if (sheet == nullptr)
+	{
+		qDebug() << "No sheet at 0";
+		return;
+	}
+	const int kRow = 0;
+	auto *row = sheet->row(kRow);
+
+	if (row == nullptr)
+	{
+		qDebug() << "No row at " << kRow;
+		return;
+	}
+	const int kCol = 2;
+	auto *cell = row->cell(kCol);
+
+	if (cell == nullptr)
+	{
+		qDebug() << "No cell at col" << kCol;
+		return;
+	}
+
+	if (!cell->HasFormula())
+	{
+		qDebug() << "Cell has no formula";
+		return;
+	}
+
+	ods::Value &value = cell->formula()->value();
+	if (value.IsNotSet())
+	{
+		qDebug() << "Formula value is not set";
+		return;
+	}
+	double *num = value.AsDouble();
+	qDebug() << "Formula value: " << QString::number(*num);
+}
+
+void
+Lesson09_WriteOneSheetFormula()
+{
+	// Only very basic formula functionality is supported.
+	// In this example all cells the formula depends on are on the same sheet,
+	// See Lesson10_WriteCrossSheetFormula() for an example with two sheets.
+
 	ods::Book book;
 	auto *sheet = book.CreateSheet("Sheet1");
 
@@ -248,52 +301,34 @@ Lesson08_UsingFormulas()
 }
 
 void
-Lesson09_CreateSampleInvoice()
+Lesson10_WriteCrossSheetFormula()
 {
-	new app::Invoice();
+	// Create a cross-sheet formula like this:
+	// sheet1.cell2 = sheet1.cell1 + sheet2.cell1
+
+	ods::Book book;
+	auto *sheet1 = book.CreateSheet("Sheet1");
+	auto *sheet2 = book.CreateSheet("Sheet2");
+
+	auto *sheet1_row = sheet1->CreateRow(0);
+	auto *sheet1_cell1 = sheet1_row->CreateCell(0);
+	sheet1_cell1->SetValue(15);
+
+	auto *sheet2_cell1 = sheet2->CreateRow(0)->CreateCell(0);
+	sheet2_cell1->SetValue(5);
+
+	auto *formula = new ods::Formula();
+
+	// Since the 2nd param (the sheet) is not specified it defaults to the same
+	// sheet the formula cell is on.
+	formula->Add(sheet1_cell1);
+	formula->Add(ods::Op::Add);
+
+	// The second param "sheet2" tells the API the cell is on a different sheet
+	formula->Add(sheet2_cell1, sheet2);
+
+	auto *formula_cell = sheet1_row->CreateCell(1);
+	formula_cell->SetFormula(formula);
+
+	Save(book);
 }
-
-void
-Lesson10_ReadFile()
-{
-	auto path = QDir(QDir::homePath()).filePath("ReadFile.ods");
-	QFile file(path);
-	if (!file.exists())
-	{
-		qDebug() << "No such file:" << path;
-		return;
-	}
-	ods::Book book(path);
-
-	auto *sheet = book.sheet(0);
-	if (sheet == nullptr)
-	{
-		qDebug() << "No sheet at 0";
-		return;
-	}
-
-	//print out the values of the first 9 cells of the 3rd row:
-	const int kRow = 2;
-	for (int i=0; i <= 8; i++)
-	{
-		const int kColumn = i;
-		ods::Cell *cell = nullptr;
-		auto *row = sheet->row(kRow);
-		if (row == nullptr)
-		{
-			qDebug() << "No row at " << QString::number(kRow);
-			return;
-		}
-		cell = row->cell(kColumn);
-
-		if (cell == nullptr) {
-			qDebug() << "No cell at " << QString::number(kColumn);
-			continue;
-		}
-		QString which_cell = "Cell [" + QString::number(kRow)
-			+ ":" + QString::number(kColumn) + "]: ";
-		QString value_as_string = GetCellValue(cell);
-		qDebug() << which_cell << value_as_string;
-	}
-}
-

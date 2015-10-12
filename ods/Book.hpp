@@ -147,7 +147,12 @@ public:
 	sheet(int index) { return content_->sheet(index); }
 	
 	ods::Sheet*
-	sheet(const QString &name) { return content_->sheet(name); }
+	sheet(const QString &name)
+	{
+		if (content_ == nullptr)
+			mtl_line("(NULL): content_");
+		return content_->sheet(name);
+	}
 	
 	int
 	sheet_count() { return content_->sheets().size(); }

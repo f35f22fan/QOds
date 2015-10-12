@@ -31,6 +31,7 @@
 #include "style/Manager.hpp"
 #include "style/Percent.hpp"
 #include "style/style.hxx"
+#include "style/Substyle.hpp"
 #include "style/tag.hh"
 #include "style/StyleFamily.hpp"
 #include "Tag.hpp"
@@ -50,6 +51,7 @@ Style::Style(ods::Book *book, ods::Tag *t,
 Style::~Style()
 {
 	delete style_family_;
+	delete substyle_;
 }
 
 ods::Style*
@@ -83,82 +85,87 @@ Style::FontSizeInInches()
 ods::style::Currency*
 Style::GetCurrencyStyle()
 {
-	if (currency_style_ != nullptr)
-		return currency_style_;
+	if (substyle_->IsCurrency())
+		return substyle_->AsCurrency();
 
 	auto &ns = tag_->ns();
 	const QString *name = tag_->GetAttrString(ns.style(),
 		ods::ns::kDataStyleName);
+
 	if (name == nullptr)
 		return nullptr;
-
 	auto *currency_style = book_->GetCurrencyStyle(*name);
-	if (currency_style != nullptr)
-		return currency_style;
-	mtl_line("Style not found");
-	return nullptr;
+
+	if (currency_style == nullptr)
+		return nullptr;
+	substyle_->currency_set(currency_style);
+	return currency_style;
 }
 
 ods::style::Date*
 Style::GetDateStyle()
 {
-	if (date_style_ != nullptr)
-		return date_style_;
+	if (substyle_->IsDate())
+		return substyle_->AsDate();
 
 	auto &ns = tag_->ns();
 	const QString *name = tag_->GetAttrString(ns.style(),
 		ods::ns::kDataStyleName);
+
 	if (name == nullptr)
 		return nullptr;
-
 	auto *date_style = book_->GetDateStyle(*name);
-	if (date_style != nullptr)
-		return date_style;
-	mtl_line("Style not found");
-	return nullptr;
+
+	if (date_style == nullptr)
+		return nullptr;
+	substyle_->date_set(date_style);
+	return date_style;
 }
 
 ods::style::Percent*
 Style::GetPercentStyle()
 {
-	if (percent_style_ != nullptr)
-		return percent_style_;
+	if (substyle_->IsPercent())
+		return substyle_->AsPercent();
 
 	auto &ns = tag_->ns();
 	const QString *name = tag_->GetAttrString(ns.style(),
 		ods::ns::kDataStyleName);
+
 	if (name == nullptr)
 		return nullptr;
-
 	auto *percent_style = book_->GetPercentStyle(*name);
-	if (percent_style != nullptr)
-		return percent_style;
-	mtl_line("Style not found");
-	return nullptr;
+
+	if (percent_style == nullptr)
+		return nullptr;
+	substyle_->percent_set(percent_style);
+	return percent_style;
 }
 
 ods::style::Duration*
 Style::GetDurationStyle()
 {
-	if (duration_style_ != nullptr)
-		return duration_style_;
+	if (substyle_->IsDuration())
+		return substyle_->AsDuration();
 
 	auto &ns = tag_->ns();
 	const QString *name = tag_->GetAttrString(ns.style(),
 		ods::ns::kDataStyleName);
+
 	if (name == nullptr)
 		return nullptr;
-
 	auto *duration_style = book_->GetDurationStyle(*name);
-	if (duration_style != nullptr)
-		return duration_style;
-	mtl_line("Style not found");
-	return nullptr;
+
+	if (duration_style == nullptr)
+		return nullptr;
+	substyle_->duration_set(duration_style);
+	return duration_style;
 }
 
 void
 Style::Init()
 {
+	substyle_ = new ods::style::Substyle();
 	tag_->AttrSet(tag_->ns().style(), ods::ns::kFamily,
 		style_family_->toString());
 	if (tag_->func() != ods::style::tag::DefaultStyle)
@@ -180,7 +187,6 @@ Style::GetTag(ods::tag::func f)
 void
 Style::SetBackgroundColor(const QColor &color)
 {
-	background_color_ = color;
 	if (!style_family_->IsCell())
 	{
 		mtl_warn("Not implemented yet");
@@ -190,7 +196,7 @@ Style::SetBackgroundColor(const QColor &color)
 	auto &ns = tag_->ns();
 	auto *tag = GetTag(ods::style::tag::SheetCellProps);
 	tag->AttrSet(ns.fo(), ods::style::kBackgroundColor,
-		background_color_.name(QColor::HexRgb));
+		color.name(QColor::HexRgb));
 }
 
 void
@@ -225,24 +231,24 @@ Style::SetBorder(ods::style::Border *border)
 }
 
 void
-Style::SetCurrencyStyle(ods::style::Currency *st)
+Style::SetCurrencyStyle(ods::style::Currency *p)
 {
-	currency_style_ = st;
-	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, st->name());
+	substyle_->currency_set(p);
+	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, p->name());
 }
 
 void
-Style::SetDateStyle(ods::style::Date *r)
+Style::SetDateStyle(ods::style::Date *p)
 {
-	date_style_ = r;
-	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, r->name());
+	substyle_->date_set(p);
+	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, p->name());
 }
 
 void
-Style::SetDurationStyle(ods::style::Duration *r)
+Style::SetDurationStyle(ods::style::Duration *p)
 {
-	duration_style_ = r;
-	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, r->name());
+	substyle_->duration_set(p);
+	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, p->name());
 }
 
 void
@@ -364,16 +370,15 @@ Style::SetParentStyle(ods::Style *style)
 }
 
 void
-Style::SetPercentStyle(ods::style::Percent *pst)
+Style::SetPercentStyle(ods::style::Percent *p)
 {
-	percent_style_ = pst;
-	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, pst->name());
+	substyle_->percent_set(p);
+	tag_->AttrSet(tag_->ns().style(), ods::ns::kDataStyleName, p->name());
 }
 
 void
 Style::SetTextColor(const QColor &color)
 {
-	text_color_ = color;
 	if (!style_family_->IsCell())
 	{
 		mtl_warn("Not implemented yet");
@@ -381,7 +386,7 @@ Style::SetTextColor(const QColor &color)
 	}
 	auto &ns = tag_->ns();
 	auto *tag = GetTag(ods::style::tag::TextProps);
-	tag->AttrSet(ns.fo(), ods::style::kColor, text_color_.name(QColor::HexRgb));
+	tag->AttrSet(ns.fo(), ods::style::kColor, color.name(QColor::HexRgb));
 }
 
 void

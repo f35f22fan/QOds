@@ -29,6 +29,7 @@
 #include <QXmlStreamAttributes>
 
 #include "cell.hxx"
+#include "decl.hxx"
 #include "global.hxx"
 #include "Duration.hpp"
 
@@ -36,7 +37,6 @@ class QXmlStreamWriter;
 
 namespace ods	{ // ods::
 
-class Cell;
 class Ns;
 
 ODS_API QChar
@@ -45,20 +45,20 @@ CharFromOp(const ods::Op);
 ODS_API ods::Op // error => ods::Op::NONE
 CharToOp(const QChar sign);
 
+ODS_API ods::CellRef* // error => nullptr
+CreateCellRef(const QStringRef &s, ods::Book *book);
+
 ODS_API ods::Cell* // error => nullptr
-FindCell(ods::cell::Ref *ref, ods::Cell *source);
+FindCell(ods::CellRef *ref, ods::Cell *source);
 
 ODS_API QString
 FontSizeToString(const double size, const ods::FontSizeType tp);
 
 ODS_API qint32
-GenColIndex(const QStringRef &letters);
+ColumnLettersToNumber(const QStringRef &letters);
 
 ODS_API QString
-GenColName(const qint32 kColumn);
-
-ODS_API ods::cell::Ref* // error => nullptr
-ReadRowCol(const QStringRef &s);
+ColumnNumberToLetters(const qint32 kColumn);
 
 ODS_API ods::Type
 TypeFromString(const QString &ods_type);

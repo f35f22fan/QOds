@@ -64,7 +64,7 @@ Cell::~Cell() {
 QString
 Cell::Address() const
 {
-	auto col_start_str = ods::GenColName(col_start_);
+	auto col_start_str = ods::ColumnNumberToLetters(col_start_);
 	return col_start_str + QString::number(row_->row_start() + 1);
 }
 

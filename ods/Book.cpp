@@ -420,6 +420,10 @@ Book::Read(const QString &file_path)
 	extracted_file_paths_ = JlCompress::extractDir(file_path, temp_dir_path_);
 	manifest_ = new ods::Manifest(this);
 	content_ = new ods::Content(this);
+
+	if (extracted())
+		content_->Read();
+
 	meta_ = new ods::Meta(this);
 	style_manager_ = new ods::style::Manager(this);
 	if (manifest_->HasSettings())

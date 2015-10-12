@@ -13,7 +13,7 @@ GetCellValue(ods::Cell *cell)
 		if (formula->error())
 			return QString("formula error: ") + formula->err();
 		auto &value = formula->value();
-		if (value.NoValue()) // should never happen
+		if (value.IsNotSet()) // should never happen
 			return "formula has no value";
 		if (value.IsDouble() || value.IsPercentage())
 		{
@@ -25,7 +25,7 @@ GetCellValue(ods::Cell *cell)
 	}
 
 	const ods::Value &value = cell->value();
-	if (value.NoValue())
+	if (value.IsNotSet())
 		return "cell value is empty";
 	else if (value.IsDouble())
 		return QString("cell value as double: ")

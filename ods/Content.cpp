@@ -44,12 +44,7 @@ namespace ods	{ // ods::
 
 Content::Content(ods::Book *book) :
 	book_(book)
-{
-	if (book_->extracted())
-		Read();
-	//else
-		//InitDefault();
-}
+{}
 
 Content::~Content()
 {

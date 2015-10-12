@@ -23,12 +23,12 @@ void
 Lesson07_UsingImages();
 
 void
-Lesson08_UsingFormulas();
+Lesson08_ReadFormula();
 
 void
-Lesson09_CreateSampleInvoice();
+Lesson09_WriteOneSheetFormula();
 
 void
-Lesson10_ReadFile();
+Lesson10_WriteCrossSheetFormula();
 
 #endif

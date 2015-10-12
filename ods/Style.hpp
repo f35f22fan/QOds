@@ -149,21 +149,18 @@ private:
 	void
 	SetUniqueName();
 	
-	QColor					background_color_;
 	ods::Book				*book_ = nullptr;
-	ods::style::Currency	*currency_style_ = nullptr;
-	ods::style::Date		*date_style_ = nullptr;
-	ods::style::Duration	*duration_style_ = nullptr;
 	QString					font_name_;
 	double					font_size_ = -1.0;
 	ods::FontSizeType		font_size_type_ = ods::FontSizeType::NotSet;
 	QString					name_;
 	ods::Style				*parent_style_ = nullptr;
-	ods::style::Percent		*percent_style_ = nullptr;
+
 	ods::StylePlace			place_;
 	ods::style::StyleFamily	*style_family_ = nullptr;
 	ods::Tag				*tag_ = nullptr;
-	QColor					text_color_;
+
+	ods::style::Substyle	*substyle_ = nullptr;
 };
 
 } // ods::

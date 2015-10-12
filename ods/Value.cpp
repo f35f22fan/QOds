@@ -47,7 +47,7 @@ void
 Value::CopyTo(ods::Value &v)
 {
 	v.type_set(type_);
-	if (NoValue())
+	if (IsNotSet())
 		return;
 	if (IsDouble())
 		v.SetDouble(*AsDouble());
@@ -68,7 +68,7 @@ Value::CopyTo(ods::Value &v)
 void
 Value::DeleteData()
 {
-	if (!Ok())
+	if (IsNotSet())
 		return;
 	if (IsDouble() || IsPercentage())
 		delete AsDouble();
@@ -96,14 +96,14 @@ Value::Read(ods::Ns &ns, ods::Attrs &attrs)
 	auto *type_attr = attrs.Get(ns.office(), ods::ns::kValueType);
 	if (type_attr == nullptr)
 	{ // shouldn't happen
-		type_ = ods::Type::Fail;
+		type_ = ods::Type::NotSet;
 		return;
 	}
 	type_ = ods::TypeFromString(type_attr->value());
 	auto *value_attr = attrs.Get(ns.office(), ods::ns::kValue);
 	if (value_attr == nullptr)
 	{
-		type_ = ods::Type::Fail;
+		type_ = ods::Type::NotSet;
 		return;
 	}
 
@@ -208,8 +208,8 @@ Value::SetString(const QString &s)
 QString
 Value::toString() const
 {
-	if (!Ok())
-		return "";
+	if (IsNotSet())
+		return QLatin1String("");
 	
 	if (IsDouble() || IsPercentage())
 		return QString::number(*AsDouble());
@@ -222,7 +222,7 @@ Value::toString() const
 	if (IsDuration())
 		return AsDuration()->ToString();
 	
-	return "";
+	return QLatin1String("");
 }
 
 } // namespace ods

@@ -5,11 +5,13 @@ namespace ods	{ // ods::
 
 class Book;
 class Cell;
+class CellRef;
 class Content;
 class CurrencyInfo;
 class DateInfo;
-class Formula;
 class DrawFrame;
+class DurationInfo;
+class Formula;
 class Manifest;
 class Meta;
 class Prefix;
@@ -18,7 +20,7 @@ class Settings;
 class Sheet;
 class Style;
 class Tag;
-class DurationInfo;
+class Value;
 
 } // ods::
 

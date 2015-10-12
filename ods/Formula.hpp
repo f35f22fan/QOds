@@ -24,6 +24,7 @@
 #define ODS_FORMULA_HPP_
 
 #include "cell.hxx"
+#include "decl.hxx"
 #include "err.hpp"
 #include "global.hxx"
 #include "Value.hpp"
@@ -34,9 +35,6 @@
 
 namespace ods	{ // ods::
 
-class Cell;
-class Value;
-
 class ODS_API Formula
 {
 public:
@@ -45,7 +43,7 @@ public:
 	virtual ~Formula();
 	
 	void
-	Add(ods::Cell *cell);
+	Add(ods::Cell*, ods::Sheet *sheet = nullptr);
 	
 	void
 	Add(const double d) { formula_ += QString::number(d); }
@@ -75,7 +73,7 @@ public:
 	formula_set(const QString &s) { formula_ = s; }
 	
 	bool
-	GetDouble(ods::cell::Ref *cell_ref, double &num);
+	GetDouble(ods::CellRef *cell_ref, double &num);
 	
 	ods::Cell*
 	source() { return source_; }

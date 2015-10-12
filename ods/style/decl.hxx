@@ -11,6 +11,7 @@ class Duration;
 class Manager;
 class Percent;
 class StyleFamily;
+class Substyle;
 
 } // ods::style::
 } // ods::

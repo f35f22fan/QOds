@@ -20,9 +20,11 @@
  * OF THIS SOFTWARE.
  */
 
-#include "ods.hh"
+#include "Book.hpp"
 #include "Cell.hpp"
+#include "CellRef.hpp"
 #include "Ns.hpp"
+#include "ods.hh"
 #include "Row.hpp"
 #include "Sheet.hpp"
 
@@ -60,23 +62,25 @@ CharToOp(const QChar c)
 }
 
 ods::Cell*
-FindCell(ods::cell::Ref *ref, ods::Cell *source)
+FindCell(ods::CellRef *ref, ods::Cell *source)
 {
-	ods::Sheet *sheet = source->row()->sheet();
-	auto *row = sheet->row(ref->row);
+	ods::Sheet *sheet = ref->sheet();
+	if (sheet == nullptr)
+		sheet = source->row()->sheet();
+	auto *row = sheet->row(ref->row());
 	if (row == nullptr)
 	{
-		mtl_qline(QStringLiteral("No such row: ") + QString::number(ref->row)
+		mtl_qline(QStringLiteral("No such row: ") + QString::number(ref->row())
 			+ QStringLiteral(", row count: ")
 			+ QString::number(sheet->CalcRowCount()));
 		return nullptr;
 	}
 	
-	auto *cell = row->cell(ref->col);
+	auto *cell = row->cell(ref->col());
 	if (cell == nullptr)
 	{
-		mtl_qline(QStringLiteral("No such cell: ") + QString::number(ref->col)
-			+ QStringLiteral(" at row: ") + QString::number(ref->row)
+		mtl_qline(QStringLiteral("No such cell: ") + QString::number(ref->col())
+			+ QStringLiteral(" at row: ") + QString::number(ref->row())
 			+ QStringLiteral(", column count: ")
 			+ QString::number(row->column_count()));
 		return nullptr;
@@ -98,7 +102,7 @@ FontSizeToString(const double size, const ods::FontSizeType size_type)
 }
 
 qint32
-GenColIndex(const QStringRef &letters)
+ColumnLettersToNumber(const QStringRef &letters)
 {
 	const auto char_A_code = QChar('A').unicode();
 	qint32 col = 0;
@@ -116,7 +120,7 @@ GenColIndex(const QStringRef &letters)
 }
 
 QString
-GenColName(const qint32 column)
+ColumnNumberToLetters(const qint32 column)
 {
 	if (column < 0)
 		return QStringLiteral("");
@@ -142,48 +146,52 @@ GenColName(const qint32 column)
 	return ret;
 }
 
-ods::cell::Ref*
-ReadRowCol(const QStringRef &s)
+ods::CellRef*
+CreateCellRef(const QStringRef &full_cell_name, ods::Book *book)
 {
-	//=> FIXME
-	/** skip '.', create proper solution later **/
-	QStringRef cell_name = s.right(s.size() -1);
-	
+	int index = full_cell_name.indexOf('.');
+	// example: table:formula="of:=[.A1]+[Sheet2.A1]"
+	QStringRef cell_name = full_cell_name.right(full_cell_name.size() - 1 - index);
+	const bool current_sheet = index == 0;
+	QString sheet_name;
+	auto *cell_ref = new ods::CellRef();
+
+	if (!current_sheet)
+	{
+		sheet_name = full_cell_name.left(index).toString();
+		cell_ref->sheet_set(book->sheet(sheet_name));
+	} else {
+		sheet_name = ".";
+	}
+
 	/**
-	QString out_str = s.toString() + QString(" becomes ")
-		+ cell_name.toString();
-	mtl_qline(out_str);
+	qDebug() << SRC_FILE_NAME << ", full cell name:" << full_cell_name
+		<< ", cell name:" << cell_name <<
+		", sheet_name:" << sheet_name;
 	**/
-	auto *cell_ref = new ods::cell::Ref();
+	
 	const int count = cell_name.size();
 	
 	for(int i = 0; i < count; i++)
 	{
 		QChar c = cell_name.at(i);
+
 		if (!c.isDigit())
 			continue;
-		
 		QStringRef letters = cell_name.left(i);
-		cell_ref->col = ods::GenColIndex(letters);
+		cell_ref->col_set(ods::ColumnLettersToNumber(letters));
 		QStringRef digits = cell_name.right(count - i);
-		//qDebug() << "letters:" << letters << ", digits:" << digits <<
-		//	", i:" << i;
 		bool ok;
-		cell_ref->row = digits.toInt(&ok);
+		cell_ref->row_set(digits.toInt(&ok));
+
 		if (ok) {
-			cell_ref->row--;
+			cell_ref->row_set(cell_ref->row() - 1);
 			break;
 		} else {
 			delete cell_ref;
 			return nullptr;
 		}
 	}
-	
-	/**
-	out_str = QString("End result, row/col: ") + QString::number(cell_ref->row)
-		+ QString("/") + QString::number(cell_ref->col);
-	mtl_qline(out_str);
-	**/
 	return cell_ref;
 }
 
@@ -191,7 +199,7 @@ ods::Type
 TypeFromString(const QString &value_type)
 {
 	if (value_type.size() == 0)
-		return ods::Type::Fail;
+		return ods::Type::NotSet;
 	if (value_type == ods::ns::kDouble)
 		return ods::Type::Double;
 	if (value_type == ods::ns::kString)
@@ -206,7 +214,7 @@ TypeFromString(const QString &value_type)
 		return ods::Type::Duration;
 	if (value_type == ods::ns::kBool)
 		return ods::Type::Bool;
-	return ods::Type::Fail;
+	return ods::Type::NotSet;
 }
 
 const char*
@@ -221,7 +229,6 @@ TypeToString(const ods::Type &value_type)
 	case ods::Type::Date: return ods::ns::kDate;
 	case ods::Type::Duration: return ods::ns::kTime;
 	case ods::Type::Bool: return ods::ns::kBool;
-	case ods::Type::Fail: return "[Fail]";
 	case ods::Type::NotSet: return "[Not set]";
 	return "[Other]";
 	}
@@ -234,7 +241,7 @@ quint32
 version_micro() { return 0; }
 
 quint32
-version_minor() { return 2; }
+version_minor() { return 3; }
 
 } // ods::
 

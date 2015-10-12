@@ -100,7 +100,7 @@ public:
 	is_covered() const;
 	
 	bool
-	IsEmpty() const { return value_.NoValue() && !HasTextP(); }
+	IsEmpty() const { return value_.IsNotSet() && !HasTextP(); }
 	
 	bool
 	IsEmpty2() const { return IsEmpty() && style_ == nullptr; }

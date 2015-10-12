@@ -130,7 +130,8 @@ Invoice::CreateSellerHeader()
 	{
 		
 		qDebug() << "If there was" << kName <<
-			"in your home dir, I'd also display the \"company logo\".";
+			"in your home dir, I'd also include the \"company logo\"" <<
+			"into the invoice.";
 	} else {
 		auto *draw_frame = cell->CreateDrawFrame(file);
 		if (draw_frame == nullptr)

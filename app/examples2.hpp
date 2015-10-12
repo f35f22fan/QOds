@@ -22,5 +22,11 @@ Lesson16_ReadDuration();
 void
 Lesson17_WriteDuration();
 
+void
+Lesson18_ReadFile();
+
+void
+Lesson19_CreateSampleInvoice();
+
 
 #endif

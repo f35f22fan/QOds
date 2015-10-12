@@ -75,9 +75,6 @@ public:
 	QString
 	Diagnose();
 	
-	bool
-	error() const { return type_ == ods::Type::Fail; }
-	
 	void*
 	get() { return data_; }
 	
@@ -97,16 +94,13 @@ public:
 	IsDuration() const { return type_ == ods::Type::Duration; }
 
 	bool
+	IsNotSet() const { return type_ == ods::Type::NotSet; }
+
+	bool
 	IsPercentage() const { return type_ == ods::Type::Percentage; }
 	
 	bool
 	IsString() const { return type_ == ods::Type::String; }
-	
-	bool
-	NoValue() const { return data_ == nullptr; }
-	
-	bool
-	Ok() const { return !error() && !NoValue(); }
 	
 	void
 	Read(ods::Ns &ns, ods::Attrs &attrs);
@@ -147,9 +141,6 @@ public:
 	
 	ods::Type
 	type() const { return type_; }
-	
-	bool
-	TypeIsValid() const { return type_ != ods::Type::Fail; }
 	
 	const char*
 	TypeToString() const { return ods::TypeToString(type_); }

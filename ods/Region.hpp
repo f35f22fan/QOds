@@ -33,7 +33,7 @@ namespace ods	{ // ods::
 
 class Value;
 
-class ODS_API Region
+class Region
 {
 protected:
 	Region();
@@ -59,11 +59,11 @@ public:
 	void
 	Print();
 	
-	void
-	ProcessAddAndSub(ods::Value &value);
+	bool // returns true on success
+	ProcessAddAndSub();
 	
-	void
-	ProcessMultAndDiv(ods::Value &value);
+	bool // returns true on success
+	ProcessMultAndDiv();
 	
 	int
 	start_index() const { return start_index_; }
@@ -86,11 +86,12 @@ private:
 	void
 	ParseString();
 	
-	int			start_index_ = -1;
-	int			end_index_ = -1;
-	int			deep_ = 0;
-	QString		str_;
-	QVector<ods::region::Token*>	tokens_;
+	ods::Region *current_region_ = nullptr;
+	int	deep_ = 0;
+	int	end_index_ = -1;
+	int	start_index_ = -1;
+	QString	str_;
+	QVector<ods::region::Token*> tokens_;
 };
 
 } // ods::

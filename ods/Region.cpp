@@ -37,54 +37,62 @@ Region::Region(const QString &s)
 	Init(s);
 }
 
-Region::~Region() {}
+Region::~Region()
+{
+	delete current_region_;
+}
 
 void
 Region::Init(const QString &formula_str)
 {
-	static ods::Region current_region; // thread-safe in c++11
+	if (current_region_ == nullptr)
+		current_region_ = new ods::Region();
+
 	for (int i = 0; i < formula_str.size(); i++)
 	{
 		const QChar c = formula_str.at(i);
-		if (c == '(') {
-			current_region.start_index_set(i);
-			current_region.deep_set(current_region.deep() + 1);
-			if (deep_ < current_region.deep())
+		if (c == '(')
+		{
+			current_region_->start_index_set(i);
+			current_region_->deep_set(current_region_->deep() + 1);
+			if (deep_ < current_region_->deep())
 			{
-				start_index_ = current_region.start_index();
-				deep_ = current_region.deep();
+				start_index_ = current_region_->start_index();
+				deep_ = current_region_->deep();
 				end_index_ = -1;
 			}
 		} else if (c == ')') {
-			if (current_region.deep() == deep_ && end_index_ == -1) {
+
+			if (current_region_->deep() == deep_ && end_index_ == -1)
 				end_index_ = i;
-			}
-			current_region.deep_set(current_region.deep() - 1);
-			if (current_region.deep() == 0) {
-				current_region.end_index_set(i);
-			}
+			current_region_->deep_set(current_region_->deep() - 1);
+			if (current_region_->deep() == 0)
+				current_region_->end_index_set(i);
 		}
 	}
 	
-	if (deep_ < 1) {
+	if (deep_ < 1)
 		str_ = formula_str;
-	} else {
+	else
 		str_ = formula_str.mid(start_index_ + 1, end_index_ - start_index_ - 1);
-	}
 }
 
 void
 Region::Eval(ods::Value &value)
 {
 	ParseString();
-	value.DeleteData();
-	value.set(new double(), ods::Type::Double);
-	
-	// first * and /
-	ProcessMultAndDiv(value);
-	// only + and - left
-	ProcessAddAndSub(value);
-	
+
+	if (!ProcessMultAndDiv()) // first process mult and division
+	{
+		value.set(nullptr, ods::Type::NotSet);
+		return;
+	}
+
+	if (!ProcessAddAndSub()) // then process addition and subtraction
+	{
+		value.set(nullptr, ods::Type::NotSet);
+		return;
+	}
 	auto *last_one = tokens_[tokens_.size()-1];
 	value.SetDouble(last_one->num);
 }
@@ -131,21 +139,21 @@ Region::Print()
 		end_index_ << ", deep" << deep_ << ", str:" << str_;
 }
 
-void
-Region::ProcessAddAndSub(ods::Value &value)
+bool
+Region::ProcessAddAndSub()
 {
 	for (int i = 0; i < tokens_.size(); i++)
 	{
 		const auto *token = tokens_[i];
 		const ods::Op op = token->op;
+
 		if (op == ods::Op::Fail)
-		{
-			value.type_set(ods::Type::Fail);
-			break;
-		}
+			return false;
+
 		if (i >= tokens_.size() - 1)
 			continue;
 		auto *token_next = tokens_[i+1];
+
 		if (op == ods::Op::Add)
 			token_next->num = token->num + token_next->num;
 		else
@@ -153,28 +161,30 @@ Region::ProcessAddAndSub(ods::Value &value)
 		tokens_.removeAt(i);
 		i--;
 	}
+	return true;
 }
 
-void
-Region::ProcessMultAndDiv(ods::Value &value)
+bool
+Region::ProcessMultAndDiv()
 {
 	for (int i = 0; i < tokens_.size(); i++)
 	{
 		const auto *token = tokens_[i];
 		const ods::Op op = token->op;
+
 		if (op == ods::Op::Fail)
-		{
-			value.type_set(ods::Type::Fail);
-			break;
-		}
+			return false;
+
 		if (op != ods::Op::Mult && op != ods::Op::Divide)
 			continue;
+
 		if (i >= tokens_.size() - 1)
 		{
 			mtl_warn("Shouldn't happen");
 			continue;
 		}
 		auto *token_next = tokens_[i+1];
+
 		if (op == ods::Op::Mult)
 			token_next->num = token->num * token_next->num;
 		else
@@ -182,6 +192,7 @@ Region::ProcessMultAndDiv(ods::Value &value)
 		tokens_.removeAt(i);
 		i--;
 	}
+	return true;
 }
 
 } // ods::

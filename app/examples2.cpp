@@ -1,4 +1,5 @@
 #include "examples2.hpp"
+#include "Invoice.hpp"
 #include "util.hpp"
 
 #include <ods/ods>
@@ -335,4 +336,54 @@ Lesson17_WriteDuration()
 	cell->SetValue(ods::Duration(32, 59, 50), style); // 32h, 59m, 50s
 
 	Save(book);
+}
+
+void
+Lesson18_ReadFile()
+{
+	auto path = QDir(QDir::homePath()).filePath("ReadFile.ods");
+	QFile file(path);
+	if (!file.exists())
+	{
+		qDebug() << "No such file:" << path;
+		return;
+	}
+	ods::Book book(path);
+
+	auto *sheet = book.sheet(0);
+	if (sheet == nullptr)
+	{
+		qDebug() << "No sheet at 0";
+		return;
+	}
+
+	//print out the values of the first 9 cells of the 3rd row:
+	const int kRow = 2;
+	for (int i=0; i <= 8; i++)
+	{
+		const int kColumn = i;
+		ods::Cell *cell = nullptr;
+		auto *row = sheet->row(kRow);
+		if (row == nullptr)
+		{
+			qDebug() << "No row at " << QString::number(kRow);
+			return;
+		}
+		cell = row->cell(kColumn);
+
+		if (cell == nullptr) {
+			qDebug() << "No cell at " << QString::number(kColumn);
+			continue;
+		}
+		QString which_cell = "Cell [" + QString::number(kRow)
+			+ ":" + QString::number(kColumn) + "]: ";
+		QString value_as_string = GetCellValue(cell);
+		qDebug() << which_cell << value_as_string;
+	}
+}
+
+void
+Lesson19_CreateSampleInvoice()
+{
+	new app::Invoice();
 }

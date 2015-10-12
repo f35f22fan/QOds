@@ -155,8 +155,7 @@ enum class Type : quint8
 	Currency,
 	Date,
 	Double,
-	Fail, // default
-	NotSet,
+	NotSet, // default
 	Percentage,
 	Duration,
 	String

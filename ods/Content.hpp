@@ -43,7 +43,7 @@ class Sheet;
 class Style;
 class Tag;
 
-class ODS_API Content
+class Content
 {
 public:
 	Content(ods::Book *book);
@@ -69,6 +69,9 @@ public:
 	
 	ods::Ns&
 	ns() const { return *ns_; }
+
+	void
+	Read();
 	
 	void
 	Save(const QString &save_dir, QString &err);
@@ -93,9 +96,6 @@ private:
 
 	void
 	PreSave();
-	
-	void
-	Read();
 	
 	ods::Tag				*automatic_styles_tag_ = nullptr;
 	const QString			base_path_;
