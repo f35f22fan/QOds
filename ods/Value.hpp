@@ -45,6 +45,9 @@ public:
 	Value(void *v, const ods::Type kType);
 	virtual ~Value();
 	
+	void
+	AppendString(const QString &s);
+	
 	bool*
 	AsBool() const { return (bool*) data_; }
 

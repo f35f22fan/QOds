@@ -373,7 +373,8 @@ Sheet(ods::Ns &ns, ods::Tag *tag)
 ods::Tag*
 SheetCell(ods::Ns &ns, ods::Tag *tag)
 {
-	if (tag == nullptr) {
+	if (tag == nullptr)
+	{
 		tag = new ods::Tag(ns, ods::tag::SheetCell);
 		tag->attr_set(ns.sheet(), ods::ns::kSheetCell);
 		return tag;
@@ -469,6 +470,7 @@ TextP(ods::Ns &ns, ods::Tag *tag)
 	tag->SubfuncAdd(ods::tag::TextPageCount);
 	tag->SubfuncAdd(ods::tag::TextPageNumber);
 	tag->SubfuncAdd(ods::tag::TextSheetName);
+	tag->SubfuncAdd(ods::tag::TextSpan);
 	tag->SubfuncAdd(ods::tag::TextTime);
 	tag->SubfuncAdd(ods::tag::TextTitle);
 	return nullptr;
@@ -505,6 +507,19 @@ TextSheetName(ods::Ns &ns, ods::Tag *tag)
 		tag->attr_set(ns.text(), ods::style::kSheetName);
 		return tag;
 	}
+	return nullptr;
+}
+
+ods::Tag*
+TextSpan(ods::Ns &ns, ods::Tag *tag)
+{
+	if (tag == nullptr)
+	{
+		tag = new ods::Tag(ns, ods::tag::TextSpan);
+		tag->attr_set(ns.text(), ods::ns::kSpan);
+		return tag;
+	}
+	
 	return nullptr;
 }
 

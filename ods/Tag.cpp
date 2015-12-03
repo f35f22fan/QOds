@@ -136,6 +136,7 @@ Tag::Read()
 		if (token == QXmlStreamReader::Characters)
 		{
 			const QString text = xml.text().toString();
+			//qDebug() << "Tag::Read text:" << text;
 			SubnodeAdd(new ods::Node(text));
 			continue;
 		}
@@ -159,7 +160,8 @@ Tag::Read()
 		}
 	}
 	
-	foreach (auto *tag, subtags) {
+	foreach (auto *tag, subtags)
+	{
 		if (!tag->used())
 			delete tag;
 	}

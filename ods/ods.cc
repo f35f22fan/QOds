@@ -240,7 +240,7 @@ quint32
 version_major() { return 1; }
 
 quint32
-version_micro() { return 0; }
+version_micro() { return 1; }
 
 quint32
 version_minor() { return 3; }

@@ -115,6 +115,7 @@ ods_const kSheetColumn			= "table-column";
 ods_const kSheetCount			= "table-count";
 ods_const kSheetRow				= "table-row";
 ods_const kShow					= "show";
+ods_const kSpan					= "span";
 ods_const kSpreadsheet			= "spreadsheet";
 ods_const kString				= "string";
 ods_const kStyle				= "style";

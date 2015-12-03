@@ -72,6 +72,7 @@ ODS_API ods::Tag*	TextP(ods::Ns&, ods::Tag*);
 ODS_API ods::Tag*	TextPageCount(ods::Ns&, ods::Tag*);
 ODS_API ods::Tag*	TextPageNumber(ods::Ns&, ods::Tag*);
 ODS_API ods::Tag*	TextSheetName(ods::Ns&, ods::Tag*);
+ODS_API ods::Tag*	TextSpan(ods::Ns&, ods::Tag*);
 ODS_API ods::Tag*	TextTime(ods::Ns&, ods::Tag*);
 ODS_API ods::Tag*	TextTitle(ods::Ns&, ods::Tag*);
 

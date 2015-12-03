@@ -31,4 +31,8 @@ Lesson09_WriteOneSheetFormula();
 void
 Lesson10_WriteCrossSheetFormula();
 
+//ignore this one, for development purposes only
+void
+PrivateTest();
+
 #endif

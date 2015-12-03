@@ -43,7 +43,7 @@ Node::~Node()
 	else if (IsString())
 		delete String();
 	else
-		mtl_qline("fix");
+		mtl_line("fixme");
 }
 
 } // ods::

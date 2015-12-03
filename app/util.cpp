@@ -42,7 +42,7 @@ GetCellValue(ods::Cell *cell)
 void
 Save(ods::Book &book)
 {
-	auto path = QDir(QDir::homePath()).filePath("file.ods");
+	auto path = QDir::home().filePath("file.ods");
 	QFile target(path);
 	QString err = book.Save(target);
 	if (err.isEmpty())

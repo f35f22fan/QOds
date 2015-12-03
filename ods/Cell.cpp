@@ -134,6 +134,8 @@ Cell::Init()
 	auto &ns = tag_->ns();
 	auto &subnodes = tag_->subnodes();
 	bool is_string_type = false;
+	static const auto text_span = "text:span";
+	
 	foreach (auto *node, subnodes)
 	{
 		if (!node->IsTag())
@@ -149,12 +151,30 @@ Cell::Init()
 		if (!is_string_type)
 			continue;
 		auto &nodes = tag->subnodes();
-		foreach (auto *n, nodes)
+		foreach (auto *node, nodes)
 		{
-			if (!n->IsString())
+			if (node->IsString())
+			{
+				QString *s = node->String();
+				value_.AppendString(*s);
 				continue;
-			value_.SetString(*n->String());
-			break;
+			}
+			
+			//==> handle <text:span> inside <text:p>
+			if (!node->IsTag())
+				continue;
+			if (node->Tag()->QualifiedName() == text_span)
+			{
+				auto *node_tag = node->Tag();
+				auto &node_subnodes = node_tag->subnodes();
+				
+				foreach (auto *subnode, node_subnodes)
+				{
+					if (subnode->IsString())
+						value_.AppendString(*subnode->String());
+				}
+			}
+			//<== handle <text:span> inside <text:p>
 		}
 		break;
 	}

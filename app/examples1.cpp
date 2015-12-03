@@ -194,7 +194,7 @@ Lesson07_UsingImages()
 	auto *cell = row->CreateCell(2);
 
 	//let's load a .png image "image.png" from the home dir into this cell
-	QFile file(QDir(QDir::home()).filePath("image.png"));
+	QFile file(QDir::home().filePath("image.png"));
 	ods::DrawFrame *draw_frame = cell->CreateDrawFrame(file);
 	if (draw_frame == nullptr)
 	{
@@ -212,7 +212,7 @@ Lesson07_UsingImages()
 void
 Lesson08_ReadFormula()
 {
-	auto path = QDir(QDir::homePath()).filePath("ReadFormula.ods");
+	auto path = QDir::home().filePath("ReadFormula.ods");
 	QFile file(path);
 	if (!file.exists())
 	{
@@ -332,3 +332,73 @@ Lesson10_WriteCrossSheetFormula()
 
 	Save(book);
 }
+
+void
+PrivateTest()
+{
+	auto path = QDir::home().filePath("text-span-example.ods");
+	QFile file(path);
+	if (!file.exists())
+	{
+		qDebug() << "No such file:" << path;
+		return;
+	}
+	ods::Book book(path);
+	auto *sheet = book.sheet(0);
+
+	if (sheet == nullptr)
+	{
+		qDebug() << "No sheet at 0";
+		return;
+	}
+	const int kRow = 1;
+	auto *row = sheet->row(kRow);
+
+	if (row == nullptr)
+	{
+		qDebug() << "No row at " << kRow;
+		return;
+	}
+	const int kCol = 0;
+	auto *cell = row->cell(kCol);
+
+	if (cell == nullptr)
+	{
+		qDebug() << "No cell at col" << kCol;
+		return;
+	}
+	
+	auto &value = cell->value();
+	if (value.IsString())
+	{
+		qDebug() << "value as string:" << *value.AsString();
+	} else {
+		qDebug() << "value not a string";
+	}
+	
+	const int kRow2 = 0;
+	row = sheet->row(kRow2);
+
+	if (row == nullptr)
+	{
+		qDebug() << "No row at " << kRow2;
+		return;
+	}
+	const int kCol2 = 1;
+	cell = row->cell(kCol2);
+
+	if (cell == nullptr)
+	{
+		qDebug() << "No cell at col" << kCol2;
+		return;
+	}
+	
+	auto &value2 = cell->value();
+	if (value2.IsString())
+	{
+		qDebug() << "value as string:" << *value2.AsString();
+	} else {
+		qDebug() << "value not a string";
+	}
+}
+

@@ -33,7 +33,7 @@ main(int argc, char *argv[])
 	
 	qDebug().nospace() << "QOds version: " << ods::version_major() << "."
 		<< ods::version_minor() << "." << ods::version_micro();
-
+	
 	//Lesson08_ReadFormula();
 	//Lesson10_WriteCrossSheetFormula();
 	Lesson19_CreateSampleInvoice();
@@ -44,5 +44,4 @@ main(int argc, char *argv[])
 	
 	return 0;
 }
-
 

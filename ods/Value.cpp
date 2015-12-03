@@ -44,6 +44,20 @@ Value::~Value()
 }
 
 void
+Value::AppendString(const QString &s)
+{
+	if (!IsString() || data_ == nullptr)
+	{
+		mtl_line("called once");
+		DeleteData();
+		type_ = ods::Type::String;
+		data_ = new QString();
+	}
+	QString *str = (QString*) data_;
+	*str += s;
+}
+
+void
 Value::CopyTo(ods::Value &v)
 {
 	v.type_set(type_);
