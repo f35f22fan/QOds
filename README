@@ -1,5 +1,10 @@
-QOds is a free Qt5 (C++11) library to read/write .ods (OpenDocument
+QOds is a free Qt5/C++11 library to work with .ods (OpenDocument
 Spreadsheet) files.
+
+Features:
+- Create and fill in .ods files with data, including formulas.
+- Read .ods files, can also calculate the value of formulas.
+- NO EDITING of .ods files supported, no plans, patches welcome.
 
 See "how_to_build.html" for how to build for Windows
 with MinGW or Visual Studio 2013.
@@ -12,5 +17,5 @@ how to create a sample invoice with formulas and (png) logos.
 The resulting sample invoice file created programmatically with QOds
 can be viewed at "app/Invoice.ods".
 
-For questions, feature requests, bug reports, etc: f35f22fan@gmail.com
+For questions, feature requests, etc: f35f22fan@gmail.com
 One man show, no forward or backward compatibility.
