@@ -93,6 +93,11 @@ Region::Eval(ods::Value &value)
 		value.set(nullptr, ods::Type::NotSet);
 		return;
 	}
+	if (tokens_.size() == 0)
+	{
+		error_set("function with no params");
+		return;
+	}
 	auto *last_one = tokens_[tokens_.size()-1];
 	value.SetDouble(last_one->num);
 }

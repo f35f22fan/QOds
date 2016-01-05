@@ -53,8 +53,17 @@ public:
 	void
 	end_index_set(const int n) { end_index_ = n; }
 	
+	const QString&
+	error() { return error_; }
+	
+	void
+	error_set(const QString &s) { error_ = s; }
+	
 	void
 	Eval(ods::Value&);
+	
+	bool
+	HasAnError() const { return error_.size() > 0; }
 	
 	void
 	Print();
@@ -90,7 +99,7 @@ private:
 	int	deep_ = 0;
 	int	end_index_ = -1;
 	int	start_index_ = -1;
-	QString	str_;
+	QString	str_, error_;
 	QVector<ods::region::Token*> tokens_;
 };
 

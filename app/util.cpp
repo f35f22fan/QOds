@@ -10,8 +10,8 @@ GetCellValue(ods::Cell *cell)
 	if (cell->HasFormula())
 	{
 		auto *formula = cell->formula();
-		if (formula->error())
-			return QString("formula error: ") + formula->err();
+		if (formula->HasAnError())
+			return QString("formula error: ") + formula->error();
 		auto &value = formula->value();
 		if (value.IsNotSet()) // should never happen
 			return "formula has no value";

@@ -207,8 +207,8 @@ Cell::InitEnd()
 	if (formula_str.isEmpty())
 		return;
 	formula_ = new ods::Formula(this, formula_str);
-	if (formula_->error())
-		mtl_qline(formula_->err());
+	if (formula_->HasAnError())
+		mtl_qline(formula_->error());
 	else
 		formula_->UpdateValue();
 }

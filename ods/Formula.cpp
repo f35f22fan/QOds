@@ -80,7 +80,7 @@ Formula::Clone()
 	formula->formula_set(formula_);
 	formula->source_set(source_);
 	value_.CopyTo(formula->value());
-	formula->err_set(err_);
+	formula->error_set(error_);
 	return formula;
 }
 
@@ -121,10 +121,10 @@ Formula::UpdateValue()
 	((10+0.5)/3)*(4.5+2.4*22.3)+8-6
 	**/
 	value_.type_set(ods::Type::NotSet);
-	err_.clear();
+	error_.clear();
 	if (!formula_.startsWith(ods::kFormulaPrefix))
 	{
-		err_ = QLatin1String("Doesn't start with ") + ods::kFormulaPrefix;
+		error_ = QLatin1String("Doesn't start with ") + ods::kFormulaPrefix;
 		return;
 	}
 	QString number_formula;
@@ -144,7 +144,7 @@ Formula::UpdateValue()
 		int bracket_end = form.indexOf(']', i + 1);
 		if (bracket_end == -1)
 			{
-				err_ = QLatin1String("] not found");
+				error_ = QLatin1String("] not found");
 				return;
 			}
 // FIXME: next line assumes a dot for current sheet name, hence
@@ -153,7 +153,7 @@ Formula::UpdateValue()
 		auto *cell_ref = ods::CreateCellRef(cell_name, book);
 		if (cell_ref == nullptr)
 		{
-			err_ = QLatin1String("ReadRowCol() failed, cell_name: ") +
+			error_ = QLatin1String("ReadRowCol() failed, cell_name: ") +
 				cell_name.toString();
 			return;
 		}
@@ -168,7 +168,7 @@ Formula::UpdateValue()
 				+ cell_name.toString();
 			mtl_qline(out_str);
 			**/
-			err_ = QLatin1String("GetDouble() failed");
+			error_ = QLatin1String("GetDouble() failed");
 			return;
 		}
 
@@ -180,14 +180,19 @@ Formula::UpdateValue()
 	while (deepest->deep() >= 1)
 	{
 		deepest->Eval(value_);
+		if (deepest->HasAnError())
+		{
+			error_ = deepest->error();
+			return;
+		}
 		if (value_.IsNotSet())
 		{
-			err_ = QLatin1String("Region::Eval() error");
+			error_ = QLatin1String("Region::Eval() error");
 			return;
 		}
 		if (!value_.IsDouble() && !value_.IsCurrency())
 		{
-			err_ = QLatin1String("Value not a number");
+			error_ = QLatin1String("Value not a number");
 			return;
 		}
 		

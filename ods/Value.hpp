@@ -154,8 +154,8 @@ public:
 private:
 	NO_ASSIGN_COPY_MOVE(Value);
 	
-	void		*data_ = nullptr;
-	ods::Type	type_ = ods::Type::NotSet;
+	void *data_ = nullptr;
+	ods::Type type_ = ods::Type::NotSet;
 };
 
 } // namespace ods

@@ -58,13 +58,10 @@ public:
 	Clone();
 	
 	const QString&
-	err() { return err_; }
+	error() { return error_; }
 	
 	void
-	err_set(const QString &s) { err_ = s; }
-	
-	bool
-	error() { return err_.size() > 0; }
+	error_set(const QString &s) { error_ = s; }
 	
 	const QString&
 	formula() const { return formula_; }
@@ -74,6 +71,9 @@ public:
 	
 	bool
 	GetDouble(ods::CellRef *cell_ref, double &num);
+	
+	bool
+	HasAnError() const { return error_.size() > 0; }
 	
 	ods::Cell*
 	source() { return source_; }
@@ -93,7 +93,7 @@ private:
 	void
 	Init(const QStringRef&);
 	
-	QString			err_;
+	QString			error_;
 	ods::Cell		*source_ = nullptr;
 	QString			formula_;
 	ods::Value		value_;

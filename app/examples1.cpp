@@ -235,7 +235,7 @@ Lesson08_ReadFormula()
 		qDebug() << "No row at " << kRow;
 		return;
 	}
-	const int kCol = 2;
+	const int kCol = 0;
 	auto *cell = row->cell(kCol);
 
 	if (cell == nullptr)
@@ -249,15 +249,22 @@ Lesson08_ReadFormula()
 		qDebug() << "Cell has no formula";
 		return;
 	}
+	
+	auto *formula = cell->formula();
+	if (formula->HasAnError())
+	{
+		qDebug() << "Formula not supported, error:" << formula->error();
+		return;
+	}
 
-	ods::Value &value = cell->formula()->value();
+	ods::Value &value = formula->value();
 	if (value.IsNotSet())
 	{
 		qDebug() << "Formula value is not set";
 		return;
 	}
 	double *num = value.AsDouble();
-	qDebug() << "Formula value: " << QString::number(*num);
+	qDebug() << "Formula value:" << QString::number(*num);
 }
 
 void
