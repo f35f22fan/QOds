@@ -21,6 +21,7 @@
  */
 
 #include "Region.hpp"
+#include "formula.hxx"
 #include "ods.hh"
 #include "Value.hpp"
 
@@ -94,24 +95,27 @@ Region::Eval(ods::Value &value)
 		value.set(nullptr, ods::Type::NotSet);
 		return;
 	}
-	if (tokens_.size() == 0)
+	
+	if (tokens_.size() != 0)
 	{
-			if (formula_ == "NA()")
-			{
-				value.SetString("#N/A");
-				return;
-			}
-
-			if (formula_ == "NOW()")
-			{
-				value.SetDate(QDateTime::currentDateTime());
-				return;
-			}
-		error_set("function with no params");
+		auto *last_one = tokens_[tokens_.size() - 1];
+		value.SetDouble(last_one->num);
 		return;
 	}
-	auto *last_one = tokens_[tokens_.size()-1];
-	value.SetDouble(last_one->num);
+	
+	// next, implement a few cherry picked functions
+	if (formula_ == ods::formula::function::NA)
+	{
+		value.SetString(QLatin1String("#N/A"));
+		return;
+	}
+
+	if (formula_ == ods::formula::function::NOW)
+	{
+		value.SetDate(QDateTime::currentDateTime());
+		return;
+	}
+	error_set(QLatin1String("function with no params"));
 }
 
 void

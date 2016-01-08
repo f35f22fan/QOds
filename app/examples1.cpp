@@ -235,7 +235,7 @@ Lesson08_ReadFormula()
 		qDebug() << "No row at " << kRow;
 		return;
 	}
-	const int kCol = 0;
+	const int kCol = 1;
 	auto *cell = row->cell(kCol);
 
 	if (cell == nullptr)
@@ -263,8 +263,19 @@ Lesson08_ReadFormula()
 		qDebug() << "Formula value is not set";
 		return;
 	}
-	double *num = value.AsDouble();
-	qDebug() << "Formula value:" << QString::number(*num);
+	if (value.IsDouble())
+	{
+		double *num = value.AsDouble();
+		qDebug() << "Formula value as a double:" << QString::number(*num);
+	} else if (value.IsString()) {
+		QString *str = value.AsString();
+		qDebug() << "Formula value as a string:" << *str;
+	} else if (value.IsDate()) {
+		QDateTime *dt = value.AsDate();
+		qDebug() << "Formula value as a date/time:" << dt->toString();
+	} else {
+		qDebug() << "Formula value type not supported";
+	}
 }
 
 void
