@@ -188,11 +188,20 @@ Formula::UpdateValue()
 		if (value_.IsNotSet())
 		{
 			error_ = QLatin1String("Region::Eval() error");
+			delete deepest;
 			return;
 		}
+		 
+		if (value_.IsString() || value_.IsDate())
+		{
+			delete deepest;
+			return;
+		}
+
 		if (!value_.IsDouble() && !value_.IsCurrency())
 		{
 			error_ = QLatin1String("Value not a number");
+			delete deepest;
 			return;
 		}
 		

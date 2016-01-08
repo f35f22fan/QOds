@@ -99,7 +99,7 @@ private:
 	int	deep_ = 0;
 	int	end_index_ = -1;
 	int	start_index_ = -1;
-	QString	str_, error_;
+	QString	str_, error_, formula_;
 	QVector<ods::region::Token*> tokens_;
 };
 

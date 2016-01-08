@@ -75,6 +75,7 @@ Region::Init(const QString &formula_str)
 		str_ = formula_str;
 	else
 		str_ = formula_str.mid(start_index_ + 1, end_index_ - start_index_ - 1);
+	formula_ = formula_str;
 }
 
 void
@@ -95,6 +96,17 @@ Region::Eval(ods::Value &value)
 	}
 	if (tokens_.size() == 0)
 	{
+			if (formula_ == "NA()")
+			{
+				value.SetString("#N/A");
+				return;
+			}
+
+			if (formula_ == "NOW()")
+			{
+				value.SetDate(QDateTime::currentDateTime());
+				return;
+			}
 		error_set("function with no params");
 		return;
 	}
