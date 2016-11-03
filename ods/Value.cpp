@@ -83,7 +83,7 @@ Value::DeleteData()
 {
 	if (IsNotSet())
 		return;
-	if (IsDouble() || IsPercentage())
+	if (IsDouble() || IsPercentage() || IsCurrency())
 		delete AsDouble();
 	else if (IsString())
 		delete AsString();
@@ -224,14 +224,12 @@ Value::toString() const
 	if (IsNotSet())
 		return QLatin1String("");
 	
-	if (IsDouble() || IsPercentage())
+	if (IsDouble() || IsPercentage() || IsCurrency())
 		return QString::number(*AsDouble());
 	if (IsString())
 		return *AsString();
 	if (IsDate())
 		return AsDate()->toString(Qt::ISODate);
-	if (IsCurrency())
-		mtl_qline("Currency not supported yet");
 	if (IsDuration())
 		return AsDuration()->ToString();
 	
