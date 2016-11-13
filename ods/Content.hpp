@@ -43,7 +43,7 @@ class Sheet;
 class Style;
 class Tag;
 
-class Content
+class ODS_API Content
 {
 public:
 	Content(ods::Book *book);
