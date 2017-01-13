@@ -3,6 +3,10 @@ message(STATUS "${CMAKE_CURRENT_LIST_FILE}")
 cmake_minimum_required(VERSION 2.8.12)
 Project(QOds)
 
+if(WIN32)
+    set (CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.7.1\\5.7\\msvc2015_64\\")
+endif (WIN32)
+
 set(LIBRARY_OUTPUT_PATH "${QOds_BINARY_DIR}/lib")
 
 message(STATUS ${CMAKE_SYSTEM}) # print OS name
