@@ -393,6 +393,7 @@ void
 Style::SetUniqueName()
 {
 	QString base;
+	
 	if (place_ == ods::StylePlace::StylesFile)
 		base = QStringLiteral("st");
 	else
@@ -406,14 +407,18 @@ Style::SetUniqueName()
 		base += QStringLiteral("ro");
 	else
 		base += QStringLiteral("sh");
+	
 	int i = 0;
+	
 	while (true)
 	{
 		name_ = base + QString::number(i);
 		i++;
+		
 		if (book_->GetStyle(name_, style_family_->id()) == nullptr)
 			break;
 	}
+	
 	tag_->AttrSet(tag_->ns().style(), ods::ns::kName, name_);
 }
 

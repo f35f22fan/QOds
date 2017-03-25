@@ -360,6 +360,7 @@ void
 Invoice::Init()
 {
 	sheet_ = book_.CreateSheet("Invoice");
+	
 	int last_index = CreateSellerHeader();
 	if (last_index == -1)
 	{

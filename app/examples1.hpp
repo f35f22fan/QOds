@@ -8,7 +8,7 @@
 #define APP_EXAMPLES1_HPP_
 
 void
-Lesson01_CreateEmptyBook();
+Lesson01_CreateBookAndSetColumnWidths();
 
 void
 Lesson02_CreateCellsOfDifferentTypes();

@@ -34,6 +34,29 @@ Sheet::~Sheet()
 		delete row;
 }
 
+void
+Sheet::AddColumnSpanUpTo(const int col_index)
+{
+	ods::Ns &ns = tag_->ns();
+	auto *col_tag = ods::tag::SheetColumn(ns, nullptr);
+	auto *column = new ods::Column(this, col_tag);
+	column->SetNumColsRepeated(col_index - last_column_width_set_ - 1);
+	
+	auto *style = book()->CreateColumnStyle();
+	
+	auto *tag = style->GetTag(ods::style::tag::SheetColumnProps);
+	tag->AttrSet(ns.fo(), ods::style::kBreakBefore, ods::ns::kAuto);
+	column->SetStyle(style);
+	
+	style = content_->book()->CreateStyle(ods::StyleFamilyId::Cell);
+//	style->SetFontName("Arial");
+	col_tag->AttrSet(ns.sheet(), ods::style::kDefaultCellStyleName,
+		style->name());
+	
+	auto &subnodes = tag_->subnodes();
+	subnodes.append(new ods::Node(col_tag));
+}
+
 ods::Book*
 Sheet::book()
 {
@@ -88,12 +111,14 @@ ods::Row*
 Sheet::GetPrevRow(const qint32 at_row)
 {
 	ods::Row *prev = nullptr;
+	
 	foreach (auto *row, rows_)
 	{
 		if (row->UpToRow() >= at_row)
 			return prev;
 		prev = row;
 	}
+	
 	return prev;
 }
 
@@ -102,13 +127,17 @@ Sheet::Init()
 {
 	ods::Ns &ns = tag_->ns();
 	ods::Attrs *attrs = tag_->attrs();
-	if (attrs != nullptr) {
+	
+	if (attrs != nullptr)
+	{
 		auto *attr = attrs->Get(ns.sheet(), ods::ns::kName);
 		if (attr != nullptr)
 			name_ = attr->value();
 	}
+	
 	qint32 row_start = 0;
 	auto &subnodes = tag_->subnodes();
+	
 	foreach (auto *node, subnodes)
 	{
 		if (!node->IsTag())
@@ -121,34 +150,13 @@ Sheet::Init()
 			row_start += row->num_rows_repeated();
 		} else if (tag->IsColumn()) {
 			//@@Fix MS Office sometimes creates > 1 table:column tags
-			if (column_ == nullptr) {
-				column_ = new ods::Column(this, tag);
-			}
+			// Not sure how to reproduce and whether still valid:
+			//if (column_ == nullptr)
+			//	column_ = new ods::Column(this, tag);
 		}
 	}
 	//if (column_ == nullptr)
 	//	InitDefault();
-}
-
-void
-Sheet::InitColumn()
-{
-	if (column_ != nullptr)
-		return;
-	ods::Ns &ns = tag_->ns();
-	auto *col_tag = ods::tag::SheetColumn(ns, nullptr);
-	column_ = new ods::Column(this, col_tag);
-	column_->SetNumColsRepeated(-1);
-	auto *style = book()->CreateStyle(ods::StyleFamilyId::Column);
-	auto *tag = style->GetTag(ods::style::tag::SheetColumnProps);
-	tag->AttrSet(ns.fo(), ods::style::kBreakBefore, ods::ns::kAuto);
-	tag->AttrSet(ns.style(), ods::style::kColumnWidth, "0.889in");
-	column_->SetStyle(style);
-	
-	style = content_->book()->CreateStyle(ods::StyleFamilyId::Cell);
-	style->SetFontName("Arial");
-	col_tag->AttrSet(ns.sheet(), ods::style::kDefaultCellStyleName,
-		style->name());
 }
 
 void
@@ -203,14 +211,16 @@ Sheet::InsertRow(const qint32 at_row)
 void
 Sheet::PreSave()
 {
-	if (column_ == nullptr)
-	{
+	// if (column_ == nullptr)
+	//{
 		//mtl_warn("Fix");
-		return;
-	}
+	//	return;
+	//}
+	
 	InitEnd();
-	auto &subnodes = tag_->subnodes();
-	subnodes.prepend(new ods::Node(column_->tag()));
+	
+	//auto &subnodes = tag_->subnodes();
+	//subnodes.prepend(new ods::Node(column_->tag()));
 }
 
 ods::Row*
@@ -223,6 +233,36 @@ Sheet::row(qint32 column)
 			return row;
 	}
 	return nullptr;
+}
+
+void
+Sheet::SetColumnWidth(const int col_index, const QString &width)
+{
+	ods::Ns &ns = tag_->ns();
+	auto *col_tag = ods::tag::SheetColumn(ns, nullptr);
+	auto *column = new ods::Column(this, col_tag);
+	column->SetNumColsRepeated(-1);
+	
+	// TODO: here check that last_column_width_set = column - 1;
+	
+	if (col_index - 1 != last_column_width_set_)
+		AddColumnSpanUpTo(col_index);
+	
+	last_column_width_set_ = col_index;
+	auto *style = book()->CreateColumnStyle();
+	
+	auto *tag = style->GetTag(ods::style::tag::SheetColumnProps);
+	tag->AttrSet(ns.fo(), ods::style::kBreakBefore, ods::ns::kAuto);
+	tag->AttrSet(ns.style(), ods::style::kColumnWidth, width);
+	column->SetStyle(style);
+	
+	style = content_->book()->CreateStyle(ods::StyleFamilyId::Cell);
+//	style->SetFontName("Arial");
+	col_tag->AttrSet(ns.sheet(), ods::style::kDefaultCellStyleName,
+		style->name());
+	
+	auto &subnodes = tag_->subnodes();
+	subnodes.append(new ods::Node(col_tag));
 }
 
 void

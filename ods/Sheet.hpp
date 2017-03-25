@@ -41,8 +41,8 @@ public:
 	qint32
 	CalcRowCount();
 	
-	ods::Column*
-	column() const { return column_; }
+	//ods::Column*
+	//column() const { return column_; }
 	
 	ods::Content*
 	content() const { return content_; }
@@ -80,6 +80,9 @@ public:
 	QVector<ods::Row*>*
 	rows() { return &rows_; }
 	
+	void // e.g. width = "0.889in"
+	SetColumnWidth(const int col_index, const QString &width);
+	
 	void
 	SetStyle(ods::Style*);
 	
@@ -93,15 +96,15 @@ private:
 	NO_ASSIGN_COPY_MOVE(Sheet);
 	
 	void
-	Init();
+	AddColumnSpanUpTo(const int col_index);
 	
 	void
-	InitColumn();
+	Init();
 	
 	void
 	InitDefault();
 	
-	ods::Column			*column_ = nullptr;
+	int last_column_width_set_ = -1; // must be -1 by default
 	ods::Content		*content_ = nullptr;
 	QByteArray			err_;
 	QVector<ods::Row*>	rows_;

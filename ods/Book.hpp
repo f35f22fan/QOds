@@ -41,6 +41,12 @@ public:
 	CreateCellStyle() { return CreateStyle(ods::StyleFamilyId::Cell); }
 
 	ods::Style*
+	CreateColumnStyle(const ods::StylePlace place = ods::StylePlace::ContentFile)
+	{
+		return CreateStyle(ods::StyleFamilyId::Column, place);
+	}
+	
+	ods::Style*
 	CreateStyle(const ods::CurrencyInfo &info);
 
 	ods::Style*

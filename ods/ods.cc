@@ -224,10 +224,10 @@ quint32
 version_major() { return 1; }
 
 quint32
-version_micro() { return 3; }
+version_micro() { return 0; }
 
 quint32
-version_minor() { return 3; }
+version_minor() { return 4; }
 
 } // ods::
 

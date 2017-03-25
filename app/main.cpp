@@ -18,13 +18,15 @@ main(int argc, char *argv[])
 	qDebug().nospace() << "QOds version: " << ods::version_major() << "."
 		<< ods::version_minor() << "." << ods::version_micro();
 	
-	//Lesson08_ReadFormula();
-	//Lesson10_WriteCrossSheetFormula();
+	// Lesson01_CreateBookAndSetColumnWidths();
+	// Lesson06_CellSpan();
+	// Lesson08_ReadFormula();
+	// Lesson10_WriteCrossSheetFormula();
+	// Lesson14_ReadDate();
+	// Lesson15_WriteDate();
+	// Lesson16_ReadDuration();
+	// Lesson17_WriteDuration();
 	Lesson19_CreateSampleInvoice();
-	//Lesson14_ReadDate();
-	//Lesson15_WriteDate();
-	//Lesson16_ReadDuration();
-	//Lesson17_WriteDuration();
 	
 	return 0;
 }

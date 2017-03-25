@@ -2,17 +2,29 @@
 #include "util.hpp"
 
 void
-Lesson01_CreateEmptyBook()
+Lesson01_CreateBookAndSetColumnWidths()
 {
 	ods::Book book;
 	auto *sheet = book.CreateSheet("Sheet1");
 	auto *row = sheet->CreateRow(0); // create first/top row
 
-	// Column (cell) count is zero-based, e.g. 0 = 1, 4 = 5.
+	// Columns, cells and rows count is zero-based, e.g. 0 = 1, 4 = 5.
 	// Cells and rows must always be created in ascending order.
 
-	row->CreateCell(1)->SetValue("At 1");
-	row->CreateCell(4)->SetValue("At 4");
+	row->CreateCell(1)->SetValue("Index 1, cell 2");
+	row->CreateCell(6)->SetValue("Index 6, cell 7");
+	
+	// Columns which don't have their widths set explicitly
+	// will default to the default width.
+	// Always set column widths in ascending order, CORRECT:
+	sheet->SetColumnWidth(0, "5.0cm"); // col 1
+	sheet->SetColumnWidth(2, "0.5in"); // col 3
+	sheet->SetColumnWidth(7, "3.92in"); // col 8
+	
+	// INCORRECT:
+	// sheet->SetColumnWidth(0, "5.0cm"); // col 1
+	// sheet->SetColumnWidth(7, "3.92in"); // col 8
+	// sheet->SetColumnWidth(2, "0.5in"); // col 3
 
 	Save(book);
 }
@@ -179,7 +191,7 @@ Lesson06_CellSpan()
 	// By default a cell spans over 1 row and 1 column.
 	// Make the cell span over 2 rows and 4 columns:
 	cell->SetRowColSpan(2, 4);
-
+	
 	Save(book);
 }
 
