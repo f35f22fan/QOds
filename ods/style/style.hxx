@@ -135,6 +135,7 @@ ods_const kTruncateOnOverflow	= "truncate-on-overflow";
 ods_const kUseOptimalRowHeight	= "use-optimal-row-height";
 ods_const kVerticalAlign		= "vertical-align";
 ods_const kWidth				= "width";
+ods_const kWrapOption			= "wrap-option";
 ods_const kWritingMode			= "writing-mode";
 ods_const kWritingModeLrtb		= "lr-tb";
 ods_const kZIndex				= "z-index";

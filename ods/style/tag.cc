@@ -127,6 +127,7 @@ HeaderFooterProps(ods::Ns &ns, ods::Tag *tag)
 	tag->Add(ns.fo(), ods::style::kMarginTop);
 	tag->Add(ns.fo(), ods::style::kMinHeight);
 	tag->Add(ns.fo(), ods::style::kPadding);
+	tag->Add(ns.fo(), ods::style::kWrapOption);
 	
 	//tag->SubfuncAdd(ods::tag::tag::BackgroundImage);
 	return nullptr;
@@ -420,6 +421,7 @@ SheetCellProps(ods::Ns &ns, ods::Tag *tag)
 	tag->Add(ns.fo(), ods::style::kBorderRight);
 	tag->Add(ns.fo(), ods::style::kBorderTop);
 	tag->Add(ns.fo(), ods::style::kBackgroundColor);
+	tag->Add(ns.fo(), ods::style::kWrapOption);
 	tag->Add(ns.style(), ods::style::kRepeatContent);
 	tag->Add(ns.style(), ods::style::kRotationAngle);
 	tag->Add(ns.style(), ods::style::kTextAlignSource);

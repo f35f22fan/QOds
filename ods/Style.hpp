@@ -123,7 +123,8 @@ public:
 	
 	ods::Tag*
 	tag() const { return tag_; }
-	
+
+    void SetWrapOption(bool wrap);
 private:
 	NO_ASSIGN_COPY_MOVE(Style);
 	

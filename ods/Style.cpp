@@ -184,6 +184,22 @@ Style::SetBackgroundColor(const QColor &color)
 }
 
 void
+Style::SetWrapOption(bool wrap)
+{
+	if (!style_family_->IsCell())
+	{
+		mtl_warn("Not implemented yet");
+		return;
+	}
+
+	auto &ns = tag_->ns();
+	auto *tag = GetTag(ods::style::tag::SheetCellProps);
+	tag->AttrSet(ns.fo(), ods::style::kWrapOption,
+        wrap ? "wrap" : "no-wrap");
+}
+
+
+void
 Style::SetBold(const bool yes)
 {
 	if (yes)
@@ -418,7 +434,6 @@ Style::SetUniqueName()
 		if (book_->GetStyle(name_, style_family_->id()) == nullptr)
 			break;
 	}
-	
 	tag_->AttrSet(tag_->ns().style(), ods::ns::kName, name_);
 }
 
