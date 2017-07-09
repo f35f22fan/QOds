@@ -155,14 +155,36 @@ void
 Tag::SetTextP(const QString &value)
 {
 	ods::Tag *textp = GetSubtag(ns_.text(), ods::ns::kP);
-	if (textp == nullptr) {
+	
+	if (textp == nullptr)
+	{
 		textp = ods::tag::TextP(ns_, nullptr);
 		subnodes_.append(new ods::Node(textp));
 	} else {
 		textp->DeleteSubnodes();
 	}
+	
 	textp->subnodes().append(new ods::Node(value));
 	bits_ |= ods::tag::bits::HasTextP;
+}
+
+QString*
+Tag::GetTextP()
+{
+	ods::Tag *textp = GetSubtag(ns_.text(), ods::ns::kP);
+	
+	if (textp == nullptr)
+		return nullptr;
+	
+	auto &vec = textp->subnodes();
+	
+	foreach (auto *node, vec)
+	{
+		if (node->IsString())
+			return node->String();
+	}
+	
+	return nullptr;
 }
 
 void

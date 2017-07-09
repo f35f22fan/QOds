@@ -8,12 +8,13 @@
 #include "examples2.hpp"
 
 #include <ods/ods>
-#include <QtCore>
+#include <QGuiApplication>
+
 
 int
 main(int argc, char *argv[])
 {
-	QCoreApplication app(argc, argv);
+	QGuiApplication app(argc, argv);
 	
 	qDebug().nospace() << "QOds version: " << ods::version_major() << "."
 		<< ods::version_minor() << "." << ods::version_micro();
@@ -27,6 +28,8 @@ main(int argc, char *argv[])
 	// Lesson16_ReadDuration();
 	// Lesson17_WriteDuration();
 	Lesson19_CreateSampleInvoice();
+	
+	//Lesson20_TestWrapAdjustment();
 	
 	return 0;
 }

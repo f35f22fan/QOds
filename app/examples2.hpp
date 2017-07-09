@@ -34,5 +34,7 @@ Lesson18_ReadFile();
 void
 Lesson19_CreateSampleInvoice();
 
+void
+Lesson20_TestWrapAdjustment();
 
 #endif

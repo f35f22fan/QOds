@@ -23,7 +23,7 @@ public:
 	Style(ods::Book*, ods::Tag*, ods::style::StyleFamily*,
 		const ods::StylePlace);
 	virtual ~Style();
-	
+	 
 	ods::Style*
 	Derive(const ods::StylePlace place = ods::StylePlace::NotSet);
 	
@@ -59,6 +59,9 @@ public:
 
 	ods::style::Duration*
 	GetDurationStyle();
+	
+	const QString*
+	GetWrapOption();
 	
 	const QString&
 	name() { return name_; }
@@ -118,13 +121,15 @@ public:
 	void
 	SetVAlignment(const ods::VAlign a);
 	
+	void
+	SetWrapOption(bool wrap);
+	
 	ods::style::StyleFamily*
 	style_family() const { return style_family_; }
 	
 	ods::Tag*
 	tag() const { return tag_; }
 
-    void SetWrapOption(bool wrap);
 private:
 	NO_ASSIGN_COPY_MOVE(Style);
 	

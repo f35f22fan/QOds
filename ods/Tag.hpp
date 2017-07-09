@@ -90,6 +90,9 @@ public:
 	
 	ods::Tag*
 	GetSubtag(ods::tag::func f, const qint8 id_num = -1);
+	
+	QString*
+	GetTextP();
 
 	qint8
 	id_num() const { return id_num_; }

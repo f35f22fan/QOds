@@ -29,6 +29,9 @@
 #include "util.hh"
 #include "Value.hpp"
 
+#include <QFont>
+#include <QFontMetricsF>
+
 namespace ods	{
 
 Cell::Cell(ods::Row *row, ods::Tag *tag, const qint32 col_start) :
@@ -43,6 +46,54 @@ Cell::Cell(ods::Row *row, ods::Tag *tag, const qint32 col_start) :
 Cell::~Cell() {
 	delete formula_;
 	delete draw_frame_;
+}
+
+int
+Cell::ComputeHeightInPixels(const int col_width_in_pixels)
+{
+	if (style_ == nullptr)
+	{
+		mtl_line();
+		return -1;
+	}
+	
+	if (style_->font_size_type() == ods::FontSizeType::NotSet)
+	{
+		mtl_line();
+		return -1;
+	}
+	
+	auto *wrap_option = style_->GetWrapOption();
+	
+	if (wrap_option == nullptr || *wrap_option != "wrap")
+	{
+		mtl_line();
+		return -1;
+	}
+	
+	auto *s = GetTextP();
+	
+	if (s == nullptr)
+	{
+		mtl_line();
+		return -1;
+	}
+	
+	const double font_size = style_->FontSizeInInches();
+	double point_size = font_size * ods::kPointsInAnInch;
+	
+	QFont font("Helvetica");
+	font.setPointSize(point_size);
+	QFontMetrics fm(font);
+	
+	QString text = *s;
+	const int pixels_wide = fm.width(text);
+	int num = pixels_wide / col_width_in_pixels;
+	
+	if (pixels_wide % col_width_in_pixels != 0)
+		num++;
+	
+	return num * point_size;
 }
 
 QString
@@ -100,6 +151,11 @@ Cell::GetTag(ods::Prefix &p, const char *name, ods::tag::func f)
 		tag_->SubtagAdd(tag);
 	}
 	return tag;
+}
+
+QString*
+Cell::GetTextP() {
+	return tag_->GetTextP();
 }
 
 bool
@@ -454,37 +510,3 @@ Cell::SetValue(const QString &value)
 }
 
 } // namespace ods
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

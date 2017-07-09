@@ -254,32 +254,84 @@ Row::SetNumRowsRepeated(const qint32 num)
 }
 
 void
-Row::SetOptimalHeightStyle()
+Row::AdjustHeightBy(ods::Cell *cell)
 {
-	if (opt_row_height_style_ == nullptr)
+	bool set_style = (opt_row_height_style_ == nullptr);
+	
+	if (set_style)
 	{
 		opt_row_height_style_ =	sheet_->book()->CreateStyle(
 			ods::StyleFamilyId::Row, ods::StylePlace::ContentFile);
 	}
+	
+	const int col_width_in_pixels = 60;
+	int max_size = cell->ComputeHeightInPixels(col_width_in_pixels);
+	
+	if (max_size == -1)
+	{
+		mtl_line();
+		if (set_style)
+		{
+			delete opt_row_height_style_;
+			opt_row_height_style_ = nullptr;
+		}
+		return;
+	}
+	
+	double total = max_size * 1.2 * ods::kInchesInAPoint;
+	mtl_line("pixel/point size: %d, size in inches + adjustment: %f",
+		max_size, total);
+	
+	opt_row_height_style_->SetOptimalRowHeight(total, ods::FontSizeType::In);
+	
+	if (set_style)
+		SetStyle(opt_row_height_style_);
+}
+
+void
+Row::SetOptimalHeightStyle()
+{
+	bool set_style = (opt_row_height_style_ == nullptr);
+	
+	if (set_style)
+	{
+		opt_row_height_style_ =	sheet_->book()->CreateStyle(
+			ods::StyleFamilyId::Row, ods::StylePlace::ContentFile);
+	}
+	
 	double max_size = 0.0;
+	
 	foreach (auto *cell, cells_)
 	{
 		auto *style = cell->style();
+		
 		if (style == nullptr)
 			continue;
+		
 		if (style->font_size_type() == ods::FontSizeType::NotSet)
 			continue;
+		
 		double d = style->FontSizeInInches();
+		
 		if (d > max_size)
 			max_size = d;
 	}
 	
 	if (max_size <= 0.0001)
+	{
+		if (set_style) // clean up if needed
+		{
+			delete opt_row_height_style_;
+			opt_row_height_style_ = nullptr;
+		}
 		return;
+	}
 	
 	opt_row_height_style_->SetOptimalRowHeight(max_size * 1.2,
 		ods::FontSizeType::In);
-	SetStyle(opt_row_height_style_);
+	
+	if (set_style)
+		SetStyle(opt_row_height_style_);
 }
 
 void

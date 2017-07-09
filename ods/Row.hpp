@@ -32,6 +32,9 @@ public:
 	void
 	AddColCount(ods::Cell *cell);
 	
+	void
+	AdjustHeightBy(ods::Cell *cell);
+	
 	ods::Cell*
 	cell(const qint32 column);
 	

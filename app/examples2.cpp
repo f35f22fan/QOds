@@ -387,3 +387,23 @@ Lesson19_CreateSampleInvoice()
 {
 	new app::Invoice();
 }
+
+void
+Lesson20_TestWrapAdjustment()
+{
+	ods::Book book;
+	auto *sheet = book.CreateSheet("Sheet1");
+	auto *row = sheet->CreateRow(0);
+	auto *cell = row->CreateCell(0);
+	
+	auto *style = book.CreateCellStyle();
+	cell->SetStyle(style);
+	style->SetFontSize(15.0, ods::FontSizeType::Pt);
+	style->SetWrapOption(true);
+	cell->SetValue("Hello, world, this is a good day, \
+	this is some more text, and then even more");
+	row->AdjustHeightBy(cell);
+	
+	
+	Save(book);
+}

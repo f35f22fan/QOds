@@ -56,13 +56,16 @@ Style::FontSizeInInches()
 {
 	if (font_size_type_ == ods::FontSizeType::In)
 		return font_size_;
-	if (font_size_type_ == ods::FontSizeType::NotSet) {
-		mtl_warn("Fix");
-		return -1.0f;
+	
+	if (font_size_type_ == ods::FontSizeType::NotSet)
+	{
+		mtl_warn("Fixme");
+		return -1.0;
 	}
 	
 	if (font_size_type_ == ods::FontSizeType::Cm)
 		return font_size_ * ods::kInchesInACm;
+	
 	return font_size_ * ods::kInchesInAPoint;
 }
 
@@ -146,16 +149,6 @@ Style::GetDurationStyle()
 	return duration_style;
 }
 
-void
-Style::Init()
-{
-	substyle_ = new ods::style::Substyle();
-	tag_->AttrSet(tag_->ns().style(), ods::ns::kFamily,
-		style_family_->toString());
-	if (tag_->func() != ods::style::tag::DefaultStyle)
-		SetUniqueName();
-}
-
 ods::Tag*
 Style::GetTag(ods::tag::func f)
 {
@@ -166,6 +159,24 @@ Style::GetTag(ods::tag::func f)
 		tag_->SubtagAdd(tag);
 	}
 	return tag;
+}
+
+const QString*
+Style::GetWrapOption()
+{
+	auto &ns = tag_->ns();
+	auto *tag = GetTag(ods::style::tag::SheetCellProps);
+	return tag->GetAttrString(ns.fo(), ods::style::kWrapOption);
+}
+
+void
+Style::Init()
+{
+	substyle_ = new ods::style::Substyle();
+	tag_->AttrSet(tag_->ns().style(), ods::ns::kFamily,
+		style_family_->toString());
+	if (tag_->func() != ods::style::tag::DefaultStyle)
+		SetUniqueName();
 }
 
 void
@@ -390,6 +401,21 @@ Style::SetVAlignment(const ods::VAlign a)
 }
 
 void
+Style::SetWrapOption(bool wrap)
+{
+	if (!style_family_->IsCell())
+	{
+		mtl_warn("Not implemented yet");
+		return;
+	}
+
+	auto &ns = tag_->ns();
+	auto *tag = GetTag(ods::style::tag::SheetCellProps);
+	tag->AttrSet(ns.fo(), ods::style::kWrapOption,
+		wrap ? "wrap" : "no-wrap");
+}
+
+void
 Style::SetUniqueName()
 {
 	QString base;
@@ -419,21 +445,6 @@ Style::SetUniqueName()
 			break;
 	}
 	tag_->AttrSet(tag_->ns().style(), ods::ns::kName, name_);
-}
-
-void
-Style::SetWrapOption(bool wrap)
-{
-	if (!style_family_->IsCell())
-	{
-		mtl_warn("Not implemented yet");
-		return;
-	}
-
-	auto &ns = tag_->ns();
-	auto *tag = GetTag(ods::style::tag::SheetCellProps);
-	tag->AttrSet(ns.fo(), ods::style::kWrapOption,
-		wrap ? "wrap" : "no-wrap");
 }
 
 } // ods::

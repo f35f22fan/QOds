@@ -56,6 +56,9 @@ public:
 	void
 	col_start_set(const int n) { col_start_ = n; }
 	
+	int
+	ComputeHeightInPixels(const int col_width_in_pixels);
+	
 	ods::DrawFrame*
 	CreateDrawFrame(const QFile &file);
 	
@@ -70,6 +73,9 @@ public:
 	
 	ods::Tag*
 	GetDrawFrameTag();
+	
+	QString*
+	GetTextP();
 	
 	bool
 	HasFormula() const { return formula_ != nullptr; }

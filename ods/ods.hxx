@@ -16,7 +16,7 @@ namespace ods	{ // ods::
 static const auto kFormulaPrefix	= QStringLiteral("of:=");
 static const auto kSpace			= QStringLiteral(" ");
 static const double kInchesInAPoint	= 0.01388888889;
-static const double kPointsInAInch	= 72.0;
+static const double kPointsInAnInch	= 72.0;
 static const double kCmInAPoint		= 0.0352777778;
 static const double kPointsInACm	= 28.3464567;
 static const double kInchesInACm	= 0.393701;
