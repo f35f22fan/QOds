@@ -23,6 +23,10 @@
 	#define MTL_COLOR_RED		""
 #endif
 
+#ifndef SRC_FILE_NAME
+#define SRC_FILE_NAME __FILE__
+#endif
+
 #ifdef _MSC_VER
 #define mtl_line(fmt, ...) fprintf(stdout, \
 	"%s[%s %s %.3d] " fmt "%s\n", MTL_COLOR_BLUE, SRC_FILE_NAME, \
