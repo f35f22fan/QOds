@@ -78,9 +78,9 @@ private:
 	NO_ASSIGN_COPY_MOVE(DateInfo);
 
 	QString		data_style_name_;
-	QString		day_number_style_ = "long";
-	QString		month_number_style_ = "long";
-	QString		year_number_style_ = "long";
+	QString		day_number_style_ = QLatin1String("long");
+	QString		month_number_style_ = QLatin1String("long");
+	QString		year_number_style_ = QLatin1String("long");
 	QString		name_;
 	ods::dateinfo::Order	order_ = ods::dateinfo::Order::DAY_MONTH_YEAR;
 	ods::dateinfo::Separator	separator_ = ods::dateinfo::Separator::DOT;
