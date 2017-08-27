@@ -151,7 +151,10 @@ public:
 
 	void
 	SetValue(const double);
-	
+
+	void
+	SetValue(const bool);
+
 	void
 	SetValue(const QString&);
 	
