@@ -11,8 +11,8 @@
 #include "Prefix.hpp"
 #include "err.hpp"
 
-class QXmlStreamAttributes;
-class QXmlStreamWriter;
+QT_FORWARD_DECLARE_CLASS(QXmlStreamAttributes)
+QT_FORWARD_DECLARE_CLASS(QXmlStreamWriter)
 
 namespace ods	{ // ods::
 class Attrs;

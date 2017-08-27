@@ -17,7 +17,7 @@
 #include <QVector>
 #include <QXmlStreamReader>
 
-class QXmlStreamWriter;
+QT_FORWARD_DECLARE_CLASS(QXmlStreamWriter)
 
 namespace ods	{
 
