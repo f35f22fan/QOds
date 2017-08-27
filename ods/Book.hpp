@@ -20,7 +20,7 @@
 #include <QTemporaryDir>
 #include <QVector>
 
-class QXmlStreamWriter;
+QT_FORWARD_DECLARE_CLASS(QXmlStreamWriter)
 
 namespace ods	{
 
