@@ -12,7 +12,7 @@
 #include "global.hxx"
 #include <QVector>
 
-QT_FORWARD_DECLARE_CLASS(QXmlStreamWriter)
+class QXmlStreamWriter;
 
 namespace ods	{
 class Cell;

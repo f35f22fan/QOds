@@ -35,4 +35,5 @@ foreach(f IN LISTS src_files)
 endforeach()
 
 add_executable(ods_test ${GUI_TYPE} ${src_files})
-target_link_libraries(ods_test ods quazip zlib Qt5::Core Qt5::Gui)
+get_property(zlib_libs GLOBAL PROPERTY zlib_libs_property)
+target_link_libraries(ods_test ods quazip ${zlib_libs} Qt5::Core Qt5::Gui)

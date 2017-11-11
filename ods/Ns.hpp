@@ -31,7 +31,7 @@ public:
 	{
 		if (kName == nullptr)
 			return true;
-		return xml_->name() == QLatin1String(kName);
+		return xml_->name() == kName;
 	}
 	
 	inline bool

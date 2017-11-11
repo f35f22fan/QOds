@@ -10,11 +10,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 include_directories(${QOds_SOURCE_DIR})
-include_directories(${QOds_SOURCE_DIR}/zlib)
 link_directories(${QOds_BINARY_DIR})
-link_directories(${QOds_BINARY_DIR}/lib)
-
-
 find_package(Qt5Core REQUIRED)
 
 # set all include directories for in and out of source builds
@@ -36,5 +32,6 @@ else (DEFINED QUAZIP_STATIC)
 endif (DEFINED QUAZIP_STATIC)
 
 add_library(quazip ${lib_type} ${src_files})
-#set_target_properties(quazip PROPERTIES VERSION 1.0.0 SOVERSION 1)
-target_link_libraries(quazip Qt5::Core zlib)
+get_property(zlib_libs GLOBAL PROPERTY zlib_libs_property)
+target_link_libraries(quazip Qt5::Core ${zlib_libs})
+

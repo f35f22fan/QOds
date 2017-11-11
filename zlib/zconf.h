@@ -8,15 +8,6 @@
 #ifndef ZCONF_H
 #define ZCONF_H
 
-#if !defined(_WIN32) && (defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__)))
-/* UNIX-style OS. ------------------------------------------- */
-#include <unistd.h>
-#if defined(_POSIX_VERSION)
-/* POSIX compliant */
-#endif
-#endif
-
-
 /*
  * If you *really* need a unique prefix for all types and library functions,
  * compile with -DZ_PREFIX. The "standard" zlib should be compiled without it.

@@ -36,7 +36,7 @@ public:
 	Write(QXmlStreamWriter &xml) const
 	{
 		if (!str_.isEmpty())
-			xml.writeNamespace(QLatin1String(uri_.str), str_);
+			xml.writeNamespace(uri_.str, str_);
 	}
 	
 private:

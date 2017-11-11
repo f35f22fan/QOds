@@ -13,8 +13,8 @@
 #include <QString>
 #include <QVector>
 
-QT_FORWARD_DECLARE_CLASS(QXmlStreamReader)
-QT_FORWARD_DECLARE_CLASS(QXmlStreamWriter)
+class QXmlStreamReader;
+class QXmlStreamWriter;
 
 namespace ods	{
 

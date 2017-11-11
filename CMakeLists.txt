@@ -3,13 +3,24 @@ message(STATUS "${CMAKE_CURRENT_LIST_FILE}")
 cmake_minimum_required(VERSION 2.8.12)
 Project(QOds)
 
-if(WIN32)
-    set (CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.7.1\\5.7\\msvc2015_64\\")
-endif (WIN32)
+#only build zlib on windows because unix has it by default
+IF(WIN32)
+	include_directories(${QOds_SOURCE_DIR}/zlib)
+	link_directories(${QOds_BINARY_DIR}/lib)
+	set_property(GLOBAL PROPERTY zlib_libs_property "zlib")
+ELSE (WIN32)
+	find_package(ZLIB REQUIRED)
+	if (ZLIB_FOUND)
+    	include_directories(${ZLIB_INCLUDE_DIRS})
+		set_property(GLOBAL PROPERTY zlib_libs_property "${ZLIB_LIBRARIES}")
+	endif(ZLIB_FOUND)
+ENDIF (WIN32)
+
+#if(WIN32)
+#    set (CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.7.1\\5.7\\msvc2015_64\\")
+#endif (WIN32)
 
 set(LIBRARY_OUTPUT_PATH "${QOds_BINARY_DIR}/lib")
-
-message(STATUS ${CMAKE_SYSTEM}) # print OS name
 
 #set (BUILD_STATIC_LIBRARIES "1")
 if (BUILD_STATIC_LIBRARIES)
@@ -18,7 +29,10 @@ if (BUILD_STATIC_LIBRARIES)
 	set(ZLIB_STATIC "1")
 endif (BUILD_STATIC_LIBRARIES)
 
-add_subdirectory(zlib)
+if (WIN32)
+	add_subdirectory(zlib)
+endif(WIN32)
+
 add_subdirectory(quazip)
 add_subdirectory(ods)
 add_subdirectory(app)

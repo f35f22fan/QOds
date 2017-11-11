@@ -17,7 +17,7 @@
 #include "global.hxx"
 #include "Duration.hpp"
 
-QT_FORWARD_DECLARE_CLASS(QXmlStreamWriter)
+class QXmlStreamWriter;
 
 namespace ods	{ // ods::
 

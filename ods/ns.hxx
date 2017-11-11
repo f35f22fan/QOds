@@ -21,7 +21,6 @@ ods_const kAuto					= "auto";
 ods_const kAutomaticFindLabels	= "automatic-find-labels";
 ods_const kBody					= "body";
 ods_const kBool					= "boolean";
-ods_const kBoolValue				= "boolean-value";
 ods_const kCalculationSettings	= "calculation-settings";
 ods_const kCaseSensitive		= "case-sensitive";
 ods_const kCellCount			= "cell-count";

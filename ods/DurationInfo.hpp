@@ -80,9 +80,9 @@ private:
 	NO_ASSIGN_COPY_MOVE(DurationInfo);
 
 	QString data_style_name_;
-	QString hours_number_style_ = QLatin1String("long");
-	QString	minutes_number_style_ = QLatin1String("long");
-	QString	seconds_number_style_ = QLatin1String("long");
+	QString hours_number_style_ = "long";
+	QString	minutes_number_style_ = "long";
+	QString	seconds_number_style_ = "long";
 	QString	name_;
 	bool	truncate_on_overflow_ = false;
 	ods::duration::Order	order_ = ods::duration::Order::HOURS_MINUTES;

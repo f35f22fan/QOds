@@ -499,18 +499,6 @@ Cell::SetValue(const double num)
 }
 
 void
-Cell::SetValue(const bool num)
-{
-	auto &ns = tag_->ns();
-	tag_->AttrDelete(ns.office(), ods::ns::kDateValue);
-	tag_->AttrSet(ns.office(), ods::ns::kValueType, ods::ns::kBool);
-	const QString value = num ? QLatin1String("true") : QLatin1String("false");
-	tag_->AttrSet(ns.office(), ods::ns::kBoolValue, value);
-	if (tag_->attrs() != nullptr)
-		value_.Read(ns, *tag_->attrs());
-}
-
-void
 Cell::SetValue(const QString &value)
 {
 	auto &ns = tag_->ns();
