@@ -27,8 +27,10 @@ Substyle::~Substyle()
 		delete AsDate();
 	else if (IsDuration())
 		delete AsDuration();
-	else if (IsPercent())
-		delete AsPercent();
+	else if (IsPercent()) {
+		// don't delete manually
+		// cause it's deleted automatically in ods::~Book()
+	}
 }
 
 } // ods::style::

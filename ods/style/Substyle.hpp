@@ -15,10 +15,10 @@ namespace style	{ // ods::style::
 
 enum class Id : quint32 {
 	NotSet = 0,
-	Currency = 1,
-	Date = 2,
-	Duration = 4,
-	Percent = 8
+	Currency = 1 << 0,
+	Date = 1 << 1,
+	Duration = 1 << 2,
+	Percent = 1 << 3
 };
 
 class Substyle

@@ -272,58 +272,6 @@ Book::GetDateStyle(const QString &name)
 	return nullptr;
 }
 
-QString*
-Book::GetMediaDirPath()
-{
-	if (!media_dir_path_.isEmpty())
-		return &media_dir_path_;
-	QDir dir(QDir(temp_dir_path_).filePath(ods::filename::kMediaDirName));
-	if (!dir.exists())
-	{
-		if (!dir.mkpath("."))
-			return nullptr;
-	}
-	media_dir_path_ = dir.absolutePath();
-	return &media_dir_path_;
-}
-
-ods::style::Percent*
-Book::GetPercentStyle(const qint8 decimal_places)
-{
-	foreach (auto *item, percent_styles_)
-	{
-		if (decimal_places == item->decimal_places())
-			return item;
-	}
-	return nullptr;
-}
-
-ods::style::Percent*
-Book::GetPercentStyle(const QString &name, const qint8 decimal_places)
-{
-	foreach (auto *item, percent_styles_)
-	{
-		if (decimal_places >= 0 && decimal_places != item->decimal_places())
-			continue;
-		if (name == item->name())
-			return item;
-	}
-	return nullptr;
-}
-
-ods::Style*
-Book::GetStyle(const QString &name, const ods::StyleFamilyId id)
-{
-	foreach (auto *style, styles_)
-	{
-		if (id != style->style_family()->id())
-			continue;
-		if (name == style->name())
-			return style;
-	}
-	return nullptr;
-}
-
 ods::style::Duration*
 Book::GetDurationStyle(const ods::DurationInfo *info)
 {
@@ -350,6 +298,60 @@ Book::GetDurationStyle(const QString &name)
 	{
 		if (name == item->name())
 			return item;
+	}
+	return nullptr;
+}
+
+QString*
+Book::GetMediaDirPath()
+{
+	if (!media_dir_path_.isEmpty())
+		return &media_dir_path_;
+	QDir dir(QDir(temp_dir_path_).filePath(ods::filename::kMediaDirName));
+	if (!dir.exists())
+	{
+		if (!dir.mkpath("."))
+			return nullptr;
+	}
+	media_dir_path_ = dir.absolutePath();
+	return &media_dir_path_;
+}
+
+ods::style::Percent*
+Book::GetPercentStyle(const qint8 decimal_places)
+{
+	foreach (auto *item, percent_styles_)
+	{
+		if (decimal_places == item->decimal_places())
+			return item;
+	}
+	
+	return nullptr;
+}
+
+ods::style::Percent*
+Book::GetPercentStyle(const QString &name, const qint8 decimal_places)
+{
+	foreach (auto *item, percent_styles_)
+	{
+		if (decimal_places >= 0 && decimal_places != item->decimal_places())
+			continue;
+		if (name == item->name())
+			return item;
+	}
+	
+	return nullptr;
+}
+
+ods::Style*
+Book::GetStyle(const QString &name, const ods::StyleFamilyId id)
+{
+	foreach (auto *style, styles_)
+	{
+		if (id != style->style_family()->id())
+			continue;
+		if (name == style->name())
+			return style;
 	}
 	return nullptr;
 }

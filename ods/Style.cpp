@@ -121,11 +121,14 @@ Style::GetPercentStyle()
 
 	if (name == nullptr)
 		return nullptr;
+	
 	auto *percent_style = book_->GetPercentStyle(*name);
 
 	if (percent_style == nullptr)
 		return nullptr;
+	
 	substyle_->percent_set(percent_style);
+	
 	return percent_style;
 }
 

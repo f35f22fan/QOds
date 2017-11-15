@@ -20,6 +20,7 @@ main(int argc, char *argv[])
 		<< ods::version_minor() << "." << ods::version_micro();
 	
 	// Lesson01_CreateBookAndSetColumnWidths();
+	// Lesson02_CreateCellsOfDifferentTypes();
 	// Lesson06_CellSpan();
 	// Lesson08_ReadFormula();
 	// Lesson10_WriteCrossSheetFormula();
@@ -28,8 +29,7 @@ main(int argc, char *argv[])
 	// Lesson16_ReadDuration();
 	// Lesson17_WriteDuration();
 	Lesson19_CreateSampleInvoice();
-	
-	//Lesson20_TestWrapAdjustment();
+	// Lesson20_TestWrapAdjustment();
 	
 	return 0;
 }

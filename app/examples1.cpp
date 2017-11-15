@@ -38,7 +38,7 @@ Lesson02_CreateCellsOfDifferentTypes()
 
 	auto *cell = row->CreateCell(0);
 	// will hold a string value
-	cell->SetValue("string");
+	cell->SetValue("hello");
 
 	cell = row->CreateCell(1);
 	// will hold a float value
@@ -51,7 +51,8 @@ Lesson02_CreateCellsOfDifferentTypes()
 	cell->SetPercentageValue(0.8, 2); // 0.8 = 80.00%, second param (2) is
 	// the number of leading zeroes after the dot, in this case
 	// it's ".00" from "80.00%"
-
+	
+	
 	// Cell with another percentage value
 	cell = row->CreateCell(3);
 	cell->SetPercentageValue(17.2); // 17.2 = 1720%, the second param

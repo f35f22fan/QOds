@@ -67,6 +67,7 @@ Value::DeleteData()
 {
 	if (IsNotSet())
 		return;
+	
 	if (IsDouble() || IsPercentage() || IsCurrency())
 		delete AsDouble();
 	else if (IsString())
@@ -75,6 +76,7 @@ Value::DeleteData()
 		delete AsDate();
 	else if (IsDuration())
 		delete AsDuration();
+	
 	data_ = nullptr;
 	type_ = ods::Type::NotSet;
 }
