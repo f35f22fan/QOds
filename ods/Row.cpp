@@ -16,8 +16,6 @@
 #include "Sheet.hpp"
 #include "Style.hpp"
 #include "style/style.hxx"
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
 
 namespace ods	{
 

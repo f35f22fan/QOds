@@ -12,7 +12,6 @@
 #include "err.hpp"
 #include <QByteArray>
 #include <QFile>
-#include <QXmlStreamReader>
 
 #include "cell.hxx"
 #include "decl.hxx"

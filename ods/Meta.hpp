@@ -13,7 +13,6 @@
 #include <QDateTime>
 #include <QFile>
 #include <QMap>
-#include <QXmlStreamReader>
 
 namespace ods	{
 
