@@ -10,6 +10,7 @@
 #include "ns.hxx"
 #include "Tag.hpp"
 #include <QStringRef>
+#include <float.h>
 
 namespace ods	{
 
@@ -211,7 +212,7 @@ Value::toString() const
 		return QLatin1String("");
 	
 	if (IsDouble() || IsPercentage() || IsCurrency())
-		return QString::number(*AsDouble());
+		return QString::number(*AsDouble(), 'f', FLT_DIG);
 	if (IsString())
 		return *AsString();
 	if (IsDate())
