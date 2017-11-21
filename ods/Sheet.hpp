@@ -13,9 +13,6 @@
 #include <QString>
 #include <QVector>
 
-class QXmlStreamReader;
-class QXmlStreamWriter;
-
 namespace ods	{
 
 class Book;

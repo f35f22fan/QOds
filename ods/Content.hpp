@@ -17,8 +17,6 @@
 #include <QVector>
 #include <QXmlStreamReader>
 
-class QXmlStreamWriter;
-
 namespace ods	{
 
 class Book;
