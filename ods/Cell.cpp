@@ -197,6 +197,9 @@ Cell::Init()
 			if (node->IsString())
 			{
 				QString *s = node->String();
+				if (!value_.IsNotSet()) {
+					value_.AppendString("\n");
+				}
 				value_.AppendString(*s);
 				continue;
 			}
