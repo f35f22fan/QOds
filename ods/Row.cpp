@@ -129,12 +129,15 @@ void
 Row::Init()
 {
 	auto *attrs = tag_->attrs();
-	if (attrs != nullptr) {
+	
+	if (attrs != nullptr)
+	{
 		auto &ns = tag_->ns();
 		auto *attr = attrs->Get(ns.sheet(), ods::ns::kNumRowsRepeated);
 		if (attr != nullptr)
 			attr->ToInt32(num_rows_repeated_);
 	}
+	
 	column_count_ = 0;
 	auto &subnodes = tag_->subnodes();
 	
@@ -142,6 +145,7 @@ Row::Init()
 	{
 		if (!node->IsTag() || !node->Tag()->IsAnyCell())
 			continue;
+		
 		auto *tag = node->Tag();
 		auto *cell = new ods::Cell(this, tag, column_count_);
 		cells_.append(cell);

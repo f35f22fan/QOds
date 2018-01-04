@@ -23,10 +23,15 @@ endif (WIN32)
 find_package(Qt5Core)
 find_package(Qt5Gui)
 
-file(GLOB_RECURSE src_files
-	"*.h" "*.hh" "*.hpp" "*.hxx"
-	"*.c" "*.cc" "*.cpp"
-	"ods")
+set(src_files
+	examples1.cpp examples1.hpp
+	examples2.cpp examples2.hpp
+	Invoice.cpp Invoice.hpp
+	Item.cpp Item.hpp
+	main.cpp
+	util.cpp util.hpp
+	tests/test1.cc tests/test1.hh
+	)
 
 foreach(f IN LISTS src_files)
 	get_filename_component(b ${f} NAME)

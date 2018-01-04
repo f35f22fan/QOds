@@ -142,7 +142,9 @@ Sheet::Init()
 	{
 		if (!node->IsTag())
 			continue;
+		
 		auto *tag = node->Tag();
+		
 		if (tag->IsRow())
 		{
 			auto *row = new ods::Row(this, tag, row_start);
@@ -227,10 +229,14 @@ ods::Row*
 Sheet::row(qint32 column)
 { 
 	qint32 current = 0;
-	foreach (auto *row, rows_) {
+	
+	foreach (auto *row, rows_)
+	{
 		current += row->num_rows_repeated();
+		
 		if (current > column)
 			return row;
+		
 	}
 	return nullptr;
 }

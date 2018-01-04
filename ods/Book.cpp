@@ -382,6 +382,48 @@ Book::InitTempDir()
 		mtl_warn("Can't create temp dir");
 }
 
+bool
+Book::Print(const int sheet_no, const int row_no, const int col_no,
+	const bool prepend_address)
+{
+	auto prefix = QString("[")
+		.append(QString::number(sheet_no)).append(':')
+		.append(QString::number(row_no)).append(':')
+		.append(QString::number(col_no)).append("] ").toLocal8Bit();
+	
+	auto *sheet = this->sheet(sheet_no);
+	
+	if (sheet == nullptr)
+	{
+		printf("%sNo such sheet\n", prefix.data());
+		return false;
+	}
+	
+	auto *row = sheet->row(row_no);
+	
+	if (row == nullptr)
+	{
+		printf("%sNo such row\n", prefix.data());
+		return false;
+	}
+	
+	auto *cell = row->cell(col_no);
+	
+	if (cell == nullptr)
+	{
+		printf("%sNo such cell\n", prefix.data());
+		return false;
+	}
+	
+	auto str_ba = cell->value().toString().toLocal8Bit();
+	if (prepend_address)
+		printf("%s\"%s\"\n", prefix.data(), str_ba.data());
+	else
+		printf("\"%s\"\n", str_ba.data());
+	
+	return true;
+}
+
 void
 Book::PrepareDir(const QString &save_dir, QString &err)
 {

@@ -113,24 +113,31 @@ Content::Read()
 	QString full_path = QDir(book_->temp_dir_path())
 		.filePath(ods::filename::kContent);
 	file_.setFileName(full_path);
+	
 	if (!file_.open(QFile::ReadOnly | QFile::Text))
 	{
 		err_ = file_.errorString();
 		return;
 	}
+	
 	QXmlStreamReader xml(&file_);
 	QXmlStreamReader::TokenType token;
+	
 	while(!xml.atEnd() && !xml.hasError())
 	{
 		token = xml.readNext();
+		
 		if (token != QXmlStreamReader::StartElement)
 			continue;
-		if (xml.name() == ods::ns::kDocContent) {
+		
+		if (xml.name() == ods::ns::kDocContent)
+		{
 			ns_ = new ods::Ns(&xml, ods::UriId::Office);
 			doc_content_ = ods::tag::OfficeDocContent(*ns_, nullptr);
 			doc_content_->Read();
 		}
 	}
+	
 	Scan(doc_content_);
 	InitEnd();
 }

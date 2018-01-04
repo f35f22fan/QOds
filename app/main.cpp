@@ -6,18 +6,18 @@
 
 #include "examples1.hpp"
 #include "examples2.hpp"
+#include "tests/test1.hh"
 
 #include <ods/ods>
 #include <QGuiApplication>
-
 
 int
 main(int argc, char *argv[])
 {
 	QGuiApplication app(argc, argv);
 	
-	qDebug().nospace() << "QOds version: " << ods::version_major() << "."
-		<< ods::version_minor() << "." << ods::version_micro();
+	mtl_line("QOds version: %u.%u.%u\n",ods::version_major(),
+		ods::version_minor(), ods::version_micro());
 	
 	// Lesson01_CreateBookAndSetColumnWidths();
 	// Lesson02_CreateCellsOfDifferentTypes();
@@ -30,6 +30,10 @@ main(int argc, char *argv[])
 	// Lesson17_WriteDuration();
 	Lesson19_CreateSampleInvoice();
 	// Lesson20_TestWrapAdjustment();
+	
+	
+	//qods::tests::ReadCellsWithMultipleTextP();
+	//qods::tests::ReadRandomCellValues();
 	
 	return 0;
 }

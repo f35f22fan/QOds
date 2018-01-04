@@ -168,6 +168,7 @@ void
 Cell::Init()
 {
 	auto *attrs = tag_->attrs();
+	
 	if (attrs == nullptr)
 		return;
 	
@@ -180,22 +181,30 @@ Cell::Init()
 	{
 		if (!node->IsTag())
 			continue;
+
 		auto *tag = node->Tag();
-		
 		auto *type_attr = attrs->Get(ns.office(), ods::ns::kValueType);
+		
 		if (type_attr != nullptr)
 		{
 			auto tp = ods::TypeFromString(type_attr->value());
 			is_string_type = (tp == ods::Type::String);
 		}
+		
 		if (!is_string_type)
 			continue;
+		
 		auto &nodes = tag->subnodes();
+		
 		foreach (auto *node, nodes)
 		{
 			if (node->IsString())
 			{
 				QString *s = node->String();
+				
+				if (!value_.IsNotSet())
+					value_.AppendString("\n");
+
 				value_.AppendString(*s);
 				continue;
 			}
@@ -216,7 +225,6 @@ Cell::Init()
 			}
 			//<== handle <text:span> inside <text:p>
 		}
-		break;
 	}
 	
 	auto *attr = attrs->Get(ns.sheet(), ods::ns::kNumColsSpanned);

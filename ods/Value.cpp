@@ -36,6 +36,7 @@ Value::AppendString(const QString &s)
 		type_ = ods::Type::String;
 		data_ = new QString();
 	}
+
 	QString *str = (QString*) data_;
 	*str += s;
 }

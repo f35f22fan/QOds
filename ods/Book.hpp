@@ -130,6 +130,10 @@ public:
 	ods::Meta*
 	meta() { return meta_; }
 	
+	bool // utility to print a cell's value
+	Print(const int sheet_no, const int row_no, const int col_no,
+		const bool prepend_address = true);
+	
 	QString
 	Save(const QFile &targetOdsFile);
 	
