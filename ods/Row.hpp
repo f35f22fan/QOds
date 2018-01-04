@@ -12,8 +12,6 @@
 #include "global.hxx"
 #include <QVector>
 
-class QXmlStreamWriter;
-
 namespace ods	{
 class Cell;
 class Sheet;

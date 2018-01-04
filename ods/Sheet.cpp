@@ -16,8 +16,6 @@
 #include "style/style.hxx"
 #include "style/tag.hh"
 #include <QDebug>
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
 
 namespace ods	{
 

@@ -15,7 +15,6 @@
 #include <QDebug>
 #include <QString>
 #include <QMap>
-#include <QXmlStreamWriter>
 
 #include <math.h>
 

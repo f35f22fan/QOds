@@ -28,6 +28,7 @@
 #include "Tag.hpp"
 #include "util.hh"
 #include "Value.hpp"
+#include <float.h>
 
 #include <QFont>
 #include <QFontMetricsF>
@@ -300,7 +301,7 @@ Cell::SetCurrencyValue(const double num, ods::Style *style)
 		style->GetCurrencyStyle()->info()->currency().iso);
 
 	// now set the string value + the currency symbol to show up
-	const QString value = QString::number(num);
+	const QString value = QString::number(num, 'f', FLT_DIG);
 	tag_->AttrSet(ns.office(), ods::ns::kValue, value);
 	tag_->SetTextP(value + QStringLiteral(" €"));
 	if (tag_->attrs() != nullptr)
@@ -509,7 +510,7 @@ Cell::SetValue(const double num)
 	auto &ns = tag_->ns();
 	tag_->AttrDelete(ns.office(), ods::ns::kDateValue);
 	tag_->AttrSet(ns.office(), ods::ns::kValueType, ods::ns::kDouble);
-	const QString value = QString::number(num);
+	const QString value = QString::number(num, 'f', FLT_DIG);
 	tag_->AttrSet(ns.office(), ods::ns::kValue, value);
 	tag_->SetTextP(value);
 	if (tag_->attrs() != nullptr)
