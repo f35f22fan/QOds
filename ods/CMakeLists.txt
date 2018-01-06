@@ -19,10 +19,57 @@ endif (NOT MSVC)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
 
-file(GLOB_RECURSE lib_files
-	"*.h" "*.hh" "*.hpp" "*.hxx"
-	"*.c" "*.cc" "*.cpp"
-	"ods")
+set(lib_files
+    Attr.cpp Attr.hpp
+    Attrs.cpp Attrs.hpp
+    Book.cpp Book.hpp
+    Cell.cpp Cell.hpp cell.hxx
+    CellRef.cpp CellRef.hpp
+    Column.cpp Column.hpp
+    CompareNumbers.hh
+    Content.cpp Content.hpp
+    Country.cpp Country.hpp
+    CurrencyInfo.cpp CurrencyInfo.hpp
+    DateInfo.cpp DateInfo.hpp
+    decl.hxx
+    DrawFrame.cpp DrawFrame.hpp
+    Duration.cpp Duration.hpp
+    DurationInfo.cpp DurationInfo.hpp
+    err.hpp
+    filename.hxx
+    Formula.cpp Formula.hpp formula.hxx
+    global.hxx
+    i18n.hxx
+    Manifest.cpp Manifest.hpp
+    meta.cc meta.hh
+    Meta.cpp Meta.hpp
+    Node.cpp Node.hpp node.hxx
+    Ns.cpp Ns.hpp ns.hxx
+    ods
+    ods.cc ods.hh ods.hxx
+    Prefix.cpp Prefix.hpp
+    Region.cpp Region.hpp region.hxx
+    Row.cpp Row.hpp
+    Settings.cpp Settings.hpp
+    Sheet.cpp Sheet.hpp
+    Style.cpp Style.hpp
+    tag.cc tag.hh
+    Tag.cpp Tag.hpp
+    util.cc util.hh
+    Value.cpp Value.hpp
+    
+    style/Border.cpp style/Border.hpp
+    style/Currency.cpp style/Currency.hpp
+    style/Date.cpp style/Date.hpp
+    style/decl.hxx
+    style/Duration.cpp style/Duration.hpp
+    style/Manager.cpp style/Manager.hpp
+    style/Percent.cpp style/Percent.hpp
+    style/style.hxx
+    style/StyleFamily.cpp style/StyleFamily.hpp
+    style/Substyle.cpp style/Substyle.hpp
+    style/tag.cc style/tag.hh
+	)
 
 foreach(f IN LISTS lib_files)
 	get_filename_component(b ${f} NAME)

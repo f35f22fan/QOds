@@ -85,6 +85,22 @@ Book::Add(ods::DrawFrame *df)
 	manifest_->Add(df);
 }
 
+ods::Cell*
+Book::cell(const int sheet_no, const int row_no, const int col_no)
+{
+	auto *sheet = this->sheet(sheet_no);
+	
+	if (sheet == nullptr)
+		return nullptr;
+	
+	auto *row = sheet->row(row_no);
+	
+	if (row == nullptr)
+		return nullptr;
+	
+	return row->cell(col_no);
+}
+
 ods::style::Currency*
 Book::CreateCurrencyStyle(const ods::StylePlace place)
 {
@@ -507,6 +523,17 @@ Book::SaveMimeTypeFile(const QString &dir_path)
 	QTextStream out(&file);
 	out << QStringLiteral("application/vnd.oasis.opendocument.spreadsheet");
 	file.close(); 
+}
+
+ods::Value*
+Book::value(const int sheet_no, const int row_no, const int col_no)
+{
+	auto *cell = this->cell(sheet_no, row_no, col_no);
+	
+	if (cell == nullptr)
+		return nullptr;
+	
+	return &cell->value();
 }
 
 void

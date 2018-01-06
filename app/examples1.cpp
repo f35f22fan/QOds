@@ -209,11 +209,13 @@ Lesson07_UsingImages()
 	//let's load a .png image "image.png" from the home dir into this cell
 	QFile file(QDir::home().filePath("image.png"));
 	ods::DrawFrame *draw_frame = cell->CreateDrawFrame(file);
+	
 	if (draw_frame == nullptr)
 	{
 		qDebug() << "DrawFrame == nullptr";
 		return;
 	}
+	
 	// optional: resize it
 	draw_frame->SetSize(QSize(40, 80));
 	// optional: move the image by x,y points relative to the cell

@@ -4,8 +4,7 @@
  * Read the LICENSE file that comes with this project for license details.
 */
 
-#ifndef ODS_CELL_HPP_
-#define ODS_CELL_HPP_
+#pragma once
 
 #include "global.hxx"
 
@@ -196,4 +195,3 @@ private:
 };
 
 } // ods::
-#endif

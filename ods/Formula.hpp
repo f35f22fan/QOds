@@ -4,8 +4,7 @@
  * Read the LICENSE file that comes with this project for license details.
 */
 
-#ifndef ODS_FORMULA_HPP_
-#define ODS_FORMULA_HPP_
+#pragma once
 
 #include "cell.hxx"
 #include "decl.hxx"
@@ -84,4 +83,4 @@ private:
 };
 
 } // ods::
-#endif
+

@@ -11,6 +11,10 @@
 #include <cstdio>
 #include <QDebug>
 
+#ifndef SRC_FILE_NAME
+#define SRC_FILE_NAME __FILE__
+#endif
+
 #ifdef __unix__
 	#define MTL_COLOR_BLUE		"\x1B[34m"
 	#define MTL_COLOR_DEFAULT	"\x1B[0m"

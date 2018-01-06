@@ -6,7 +6,6 @@
 
 #include "examples1.hpp"
 #include "examples2.hpp"
-#include "tests/test1.hh"
 
 #include <ods/ods>
 #include <QGuiApplication>
@@ -30,10 +29,6 @@ main(int argc, char *argv[])
 	// Lesson17_WriteDuration();
 	Lesson19_CreateSampleInvoice();
 	// Lesson20_TestWrapAdjustment();
-	
-	
-	//qods::tests::ReadCellsWithMultipleTextP();
-	//qods::tests::ReadRandomCellValues();
 	
 	return 0;
 }

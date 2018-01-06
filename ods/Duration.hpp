@@ -4,15 +4,14 @@
  * Read the LICENSE file that comes with this project for license details.
 */
 
-#ifndef ODS_DURATION_HPP_
-#define ODS_DURATION_HPP_
+#pragma once
 
 #include <QtGlobal>
 #include <QtCore/QString>
 
 #include "global.hxx"
 
-namespace ods		{ // ods::
+namespace ods { // ods::
 
 class ODS_API Duration
 {
@@ -22,6 +21,9 @@ public:
 	virtual ~Duration();
 	
 	Duration(const ods::Duration &rhs);
+	
+	bool
+	operator==(const ods::Duration &rhs) const;
 	
 	operator QString();
 	
@@ -84,5 +86,5 @@ private:
 	bool		valid_ = false;
 };
 
-} // namespace ods
-#endif
+} // ods::
+

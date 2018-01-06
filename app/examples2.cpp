@@ -128,7 +128,7 @@ Lesson13_WriteCurrency()
 	auto *cell = row->CreateCell(0);
 	cell->SetCurrencyValue(524); // defaults to "EUR" (euros)
 
-	// set to euros (shows "€" instead of "EUR"), Germany,
+	// set to euros (shows up as "€" instead of "EUR"), Germany,
 	// German, with 3 decimal places
 	// see file i18n.hxx for details.
 	ods::CurrencyInfo info;
@@ -142,7 +142,7 @@ Lesson13_WriteCurrency()
 	row->CreateCell(1)->SetCurrencyValue(1008.94, style);
 	row->CreateCell(2)->SetCurrencyValue(0.402, style);
 
-	// set to "USD" (shows "USD" instead of "$"), USA, English
+	// set to "USD" (shows up as "USD" instead of "$"), USA, English
 	// with 1 decimal place
 	info.currency_set(ods::i18n::kUSD);
 	info.show_symbol_set(false);

@@ -33,7 +33,9 @@
 #include <QFont>
 #include <QFontMetricsF>
 
-namespace ods	{
+static const auto text_span = QStringLiteral("text:span");
+
+namespace ods {
 
 Cell::Cell(ods::Row *row, ods::Tag *tag, const qint32 col_start) :
 	col_start_(col_start),
@@ -83,7 +85,7 @@ Cell::ComputeHeightInPixels(const int col_width_in_pixels)
 	const double font_size = style_->FontSizeInInches();
 	double point_size = font_size * ods::kPointsInAnInch;
 	
-	QFont font("Helvetica");
+	QFont font(QLatin1String("Helvetica"));
 	font.setPointSize(point_size);
 	QFontMetrics fm(font);
 	
@@ -176,7 +178,6 @@ Cell::Init()
 	auto &ns = tag_->ns();
 	auto &subnodes = tag_->subnodes();
 	bool is_string_type = false;
-	static const auto text_span = "text:span";
 	
 	foreach (auto *node, subnodes)
 	{
@@ -303,7 +304,7 @@ Cell::SetCurrencyValue(const double num, ods::Style *style)
 	// now set the string value + the currency symbol to show up
 	const QString value = QString::number(num, 'f', FLT_DIG);
 	tag_->AttrSet(ns.office(), ods::ns::kValue, value);
-	tag_->SetTextP(value + QStringLiteral(" €"));
+	tag_->SetTextP(value + " €");
 	if (tag_->attrs() != nullptr)
 		value_.Read(ns, *tag_->attrs());
 }

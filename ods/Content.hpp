@@ -4,8 +4,7 @@
  * Read the LICENSE file that comes with this project for license details.
 */
 
-#ifndef ODS_Content_HPP_
-#define ODS_Content_HPP_
+#pragma once
 
 #include "global.hxx"
 #include "ns.hxx"
@@ -92,5 +91,4 @@ private:
 	QVector<ods::Sheet*>	sheets_;
 };
 
-} // namespace ods
-#endif
+} // ods::

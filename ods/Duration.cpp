@@ -22,6 +22,17 @@ Duration::Duration(const qint32 h, const qint32 m, const qint32 s)
 Duration::~Duration()
 {}
 
+bool
+Duration::operator==(const ods::Duration &rhs) const
+{
+	return years() == rhs.years() &&
+			months() == rhs.months() &&
+			days() == rhs.days() &&
+			hours() == rhs.hours() &&
+			minutes() == rhs.minutes() &&
+			seconds() == rhs.seconds();
+}
+
 void
 Duration::Decode(const QString &str)
 {
@@ -78,27 +89,27 @@ Duration::Duration(const ods::Duration &rhs)
 
 Duration::operator QString()
 {
-	QString s = "years: ";
+	QString s = QLatin1String("years: ");
 	s += QString::number(years_);
-	s += ", months: ";
+	s += QLatin1String(", months: ");
 	s += QString::number(months_);
-	s += ", days: ";
+	s += QLatin1String(", days: ");
 	s += QString::number(days_);
-	s += ", hours: ";
+	s += QLatin1String(", hours: ");
 	s += QString::number(hours_),
-	s += ", minutes: ";
+	s += QLatin1String(", minutes: ");
 	s += QString::number(minutes_);
-	s += ", seconds: ";
+	s += QLatin1String(", seconds: ");
 	s += QString::number(seconds_);
-	s += ", valid: ";
-	s += (valid_ ? "true" : "false");
+	s += QLatin1String(", valid: ");
+	s += (valid_ ? QLatin1String("true") : QLatin1String("false"));
 	return s;
 }
 
 QString
 Duration::ToString() const
 {
-	QString str = "PT";
+	QString str = QLatin1String("PT");
 	str += QString::number(hours_);
 	str += 'H';
 	str += QString::number(minutes_);

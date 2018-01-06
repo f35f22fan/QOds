@@ -34,6 +34,15 @@ public:
 	void
 	Add(ods::DrawFrame *df);
 	
+	ods::Cell*
+	cell(const int row_no, const int col_no)
+	{
+		return cell(0, row_no, col_no);
+	}
+	
+	ods::Cell*
+	cell(const int sheet_no, const int row_no, const int col_no);
+	
 	ods::Content*
 	content() { return content_; }
 	
@@ -159,6 +168,15 @@ public:
 	
 	const QString&
 	temp_dir_path() const { return temp_dir_path_; }
+	
+	ods::Value*
+	value(const int row_no, const int col_no)
+	{
+		return value(0, row_no, col_no);
+	}
+	
+	ods::Value*
+	value(const int sheet_no, const int row_no, const int col_no);
 	
 	void
 	WriteStartDocument(QXmlStreamWriter&);
