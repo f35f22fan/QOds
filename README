@@ -1,3 +1,11 @@
+Update (April 22 2018): If you wanna fork/contribute to this project please consider instead:
+
+https://github.com/f35f22fan/Ods2
+
+which is this project rewritten from scratch to fix its core shortcommings.
+
+------
+
 QOds is a free Qt5/C++11 library to work with .ods (OpenDocument
 Spreadsheet) files.
 
