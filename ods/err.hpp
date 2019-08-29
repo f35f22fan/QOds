@@ -27,7 +27,9 @@
 	#define MTL_COLOR_RED		""
 #endif
 
-#ifdef _MSC_VER
+#if defined(QODS_SILENT)
+#define mtl_line(fmt, args...) do {} while (0)
+#elif defined(_MSC_VER)
 #define mtl_line(fmt, ...) fprintf(stdout, \
 	"%s[%s %s %.3d] " fmt "%s\n", MTL_COLOR_BLUE, SRC_FILE_NAME, \
 	__FUNCTION__, __LINE__, __VA_ARGS__, MTL_COLOR_DEFAULT)
@@ -37,7 +39,9 @@
 	__FUNCTION__, __LINE__, ##args, MTL_COLOR_DEFAULT)
 #endif
 
-#ifdef _MSC_VER
+#if defined(QODS_SILENT)
+#define mtl_warn(fmt, args...) do {} while (0)
+#elif defined(_MSC_VER)
 #define mtl_warn(fmt, ...) fprintf(stderr, \
 	"%s[Warning %s %s %.3d] " fmt "%s\n", MTL_COLOR_RED, SRC_FILE_NAME, \
 	__FUNCTION__, __LINE__, __VA_ARGS__, MTL_COLOR_DEFAULT)
@@ -47,9 +51,13 @@
 	__FUNCTION__, __LINE__, ##args, MTL_COLOR_DEFAULT)
 #endif
 
+#if defined(QODS_SILENT)
+#define mtl_status(status) do {} while (0)
+#else
 #define mtl_status(status) fprintf (stderr, "%s[%s %s %.3d] %s%s\n", \
 	MTL_COLOR_RED, SRC_FILE_NAME, \
 	__LINE__, __FUNCTION__, strerror(status), MTL_COLOR_DEFAULT)
+#endif
 
 #define mtl_errno fprintf (stderr, "[%s %.3d] %m\n", __LINE__, __FUNCTION__)
 
