@@ -271,7 +271,7 @@ Row::AdjustHeightBy(ods::Cell *cell)
 	
 	if (max_size == -1)
 	{
-		mtl_line();
+		mtl_line("");
 		if (set_style)
 		{
 			delete opt_row_height_style_;
