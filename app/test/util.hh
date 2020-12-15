@@ -13,7 +13,7 @@ test_files_dir_path()
 	QDir dir(QCoreApplication::applicationDirPath());
 	
 	if (!dir.cdUp() || !dir.cdUp())
-		mtl_line();
+		mtl_line("");
 	
 	return dir.absolutePath() + "/app/test/data_files/";
 }

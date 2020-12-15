@@ -56,13 +56,13 @@ Cell::ComputeHeightInPixels(const int col_width_in_pixels)
 {
 	if (style_ == nullptr)
 	{
-		mtl_line();
+		mtl_line("");
 		return -1;
 	}
 	
 	if (style_->font_size_type() == ods::FontSizeType::NotSet)
 	{
-		mtl_line();
+		mtl_line("");
 		return -1;
 	}
 	
@@ -70,7 +70,7 @@ Cell::ComputeHeightInPixels(const int col_width_in_pixels)
 	
 	if (wrap_option == nullptr || *wrap_option != "wrap")
 	{
-		mtl_line();
+		mtl_line("");
 		return -1;
 	}
 	
@@ -78,7 +78,7 @@ Cell::ComputeHeightInPixels(const int col_width_in_pixels)
 	
 	if (s == nullptr)
 	{
-		mtl_line();
+		mtl_line("");
 		return -1;
 	}
 	
